@@ -1024,6 +1024,71 @@
       background: rgba(22, 35, 58, 0.05);
       color: var(--muted);
     }
+    .domestic-chart {
+      margin-top: 18px;
+      padding: 20px;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.56);
+      border: 1px solid rgba(22, 35, 58, 0.08);
+    }
+    .domestic-grid {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .domestic-card {
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.7);
+      border: 1px solid rgba(22, 35, 58, 0.08);
+    }
+    .domestic-card h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+    }
+    .domestic-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .metric-bar-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .metric-bar-item {
+      display: grid;
+      gap: 6px;
+    }
+    .metric-bar-item strong {
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .metric-bar-track {
+      height: 14px;
+      border-radius: 999px;
+      background: rgba(22, 35, 58, 0.08);
+      overflow: hidden;
+    }
+    .metric-bar-fill {
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #b6603d, #d8b063);
+    }
+    .metric-bar-fill.teal {
+      background: linear-gradient(90deg, #2b4269, #1f6b70);
+    }
+    .metric-bar-fill.gray {
+      background: linear-gradient(90deg, #5d6678, #9ba2ad);
+    }
+    .metric-foot {
+      margin-top: 14px;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
 
     [contenteditable="true"] {
       outline: 2px dashed rgba(182, 96, 61, 0.28);
@@ -1203,6 +1268,9 @@
       .spec-row,
       .evidence-head,
       .evidence-row {
+        grid-template-columns: 1fr;
+      }
+      .domestic-grid {
         grid-template-columns: 1fr;
       }
       .cost-stack {
@@ -1662,6 +1730,72 @@
                 <div class="evidence-cell evidence-none">暂不建议硬比</div>
               </div>
               <div class="section-note">这张图不是性能分数，而是“公开证据可得性”图。对国际和国产平台做同表对比时，很多争议不来自芯片本身，而来自公开 benchmark、云价和软件栈信息是否足够透明。</div>
+            </div>
+            <div class="domestic-chart">
+              <div class="section-title" style="margin-bottom:16px;">
+                <div><h2 style="font-size:28px;">国产主线公开规格图</h2></div>
+                <p>这一组只放目前能从公开官方页面核实的主线规格，优先比较 `INT8 / FP16` 推理能力，以及已经公开的内存或带宽指标。没有公开统一字段的，不强行补齐。</p>
+              </div>
+              <div class="domestic-grid">
+                <article class="domestic-card">
+                  <h3>华为昇腾 Atlas 300I A2</h3>
+                  <p>当前社区公开规格较完整的新一代推理卡，适合生成式大模型推理与内容审核场景。</p>
+                  <div class="metric-bar-list">
+                    <div class="metric-bar-item">
+                      <strong>INT8 560 TOPS</strong>
+                      <div class="metric-bar-track"><div class="metric-bar-fill" style="width:100%;"></div></div>
+                    </div>
+                    <div class="metric-bar-item">
+                      <strong>FP16 280 TFLOPS</strong>
+                      <div class="metric-bar-track"><div class="metric-bar-fill teal" style="width:100%;"></div></div>
+                    </div>
+                    <div class="metric-bar-item">
+                      <strong>内存带宽 1.6 TB/s</strong>
+                      <div class="metric-bar-track"><div class="metric-bar-fill gray" style="width:100%;"></div></div>
+                    </div>
+                  </div>
+                  <div class="metric-foot">公开来源是昇腾社区 Atlas 300I A2 推理卡产品页。这个口径与旧版 Atlas 300I Duo 不同，后续应避免混用。</div>
+                </article>
+                <article class="domestic-card">
+                  <h3>寒武纪 MLU370-X8</h3>
+                  <p>双芯加速卡，公开字段比较完整，适合行业推理、本地可交付和多卡分布式推理验证。</p>
+                  <div class="metric-bar-list">
+                    <div class="metric-bar-item">
+                      <strong>INT8 256 TOPS</strong>
+                      <div class="metric-bar-track"><div class="metric-bar-fill" style="width:46%;"></div></div>
+                    </div>
+                    <div class="metric-bar-item">
+                      <strong>FP16 96 TFLOPS</strong>
+                      <div class="metric-bar-track"><div class="metric-bar-fill teal" style="width:34%;"></div></div>
+                    </div>
+                    <div class="metric-bar-item">
+                      <strong>48GB / 614.4 GB/s / 250W</strong>
+                      <div class="metric-bar-track"><div class="metric-bar-fill gray" style="width:38%;"></div></div>
+                    </div>
+                  </div>
+                  <div class="metric-foot">公开来源是寒武纪 `MLU370-X8` 产品页，已明确给出 48GB、614.4GB/s、200GB/s 双向聚合互联和 250W 最大热功耗。</div>
+                </article>
+                <article class="domestic-card">
+                  <h3>算能 BM1684X</h3>
+                  <p>更偏轻量推理和边缘到云协同，公开规格侧重推理算力，适合与大模型主线分开理解。</p>
+                  <div class="metric-bar-list">
+                    <div class="metric-bar-item">
+                      <strong>INT8 32 TOPS</strong>
+                      <div class="metric-bar-track"><div class="metric-bar-fill" style="width:6%;"></div></div>
+                    </div>
+                    <div class="metric-bar-item">
+                      <strong>FP16 / BF16 16 TFLOPS</strong>
+                      <div class="metric-bar-track"><div class="metric-bar-fill teal" style="width:6%;"></div></div>
+                    </div>
+                    <div class="metric-bar-item">
+                      <strong>16GB RAM（主板公开配置）</strong>
+                      <div class="metric-bar-track"><div class="metric-bar-fill gray" style="width:14%;"></div></div>
+                    </div>
+                  </div>
+                  <div class="metric-foot">公开来源来自 SOPHGO BM1684X 主板页。这里刻意不和大模型 GPU / NPU 做同类吞吐排名，而是强调它在轻量推理与行业视频场景的定位。</div>
+                </article>
+              </div>
+              <div class="section-note">这张图的用途不是证明谁“绝对更强”，而是把国产主线平台的公开规格先拉到同一个视图里。后续如果要做更严格的国产 vs 国际性能图，仍然要以统一模型、统一精度、统一 batch 和统一上下文长度为前提。</div>
             </div>
           </section>
 
