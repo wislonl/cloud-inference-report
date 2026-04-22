@@ -46,6 +46,79 @@
       width: min(calc(100% - 24px), var(--max));
       margin: 14px auto 54px;
     }
+    body.locked {
+      overflow: hidden;
+    }
+    .access-gate {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      background:
+        radial-gradient(circle at top left, rgba(182, 96, 61, 0.18), transparent 26%),
+        radial-gradient(circle at bottom right, rgba(31, 107, 112, 0.16), transparent 28%),
+        rgba(12, 20, 34, 0.76);
+      backdrop-filter: blur(14px);
+    }
+    .access-gate.hidden {
+      display: none;
+    }
+    .gate-card {
+      width: min(100%, 460px);
+      padding: 30px 28px;
+      border-radius: 26px;
+      background: rgba(255, 250, 244, 0.94);
+      border: 1px solid rgba(255,255,255,0.5);
+      box-shadow: 0 28px 80px rgba(7, 12, 22, 0.28);
+      color: var(--ink);
+    }
+    .gate-card h1 {
+      margin: 0 0 10px;
+      font-size: 34px;
+      line-height: 1.08;
+      font-family: "Times New Roman", "Songti SC", "STSong", serif;
+    }
+    .gate-card p {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .gate-field {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 1px solid rgba(22, 35, 58, 0.14);
+      background: white;
+      font-size: 16px;
+      outline: none;
+    }
+    .gate-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 14px;
+      align-items: center;
+    }
+    .gate-submit {
+      border: 0;
+      border-radius: 14px;
+      padding: 12px 18px;
+      background: linear-gradient(135deg, #efc38a, #b6603d);
+      color: white;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .gate-hint {
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .gate-error {
+      min-height: 20px;
+      margin-top: 10px;
+      color: #b22f2f;
+      font-size: 13px;
+    }
 
     .toolbar {
       position: relative;
@@ -752,7 +825,19 @@
     }
   </style>
 </head>
-<body class="read-mode">
+<body class="read-mode locked">
+  <div class="access-gate" id="accessGate">
+    <div class="gate-card">
+      <h1>访问口令</h1>
+      <p>此分享页已加入口令访问。输入正确密码后才可查看内容。</p>
+      <input class="gate-field" id="gatePassword" type="password" placeholder="请输入访问密码">
+      <div class="gate-actions">
+        <button class="gate-submit" id="gateSubmit">进入页面</button>
+        <span class="gate-hint">当前分享密码由发送方提供</span>
+      </div>
+      <div class="gate-error" id="gateError"></div>
+    </div>
+  </div>
   <div class="app">
     <div class="toolbar">
       <div class="brand">
@@ -1445,8 +1530,14 @@
   </div>
 
   <script>
+    const ACCESS_PASSWORD = "eswin";
+    const ACCESS_STORAGE_KEY = "cloud-inference-report-access-v1";
     const STORAGE_KEY = "cloud-inference-report-edits-v2";
     const body = document.body;
+    const accessGate = document.getElementById("accessGate");
+    const gatePassword = document.getElementById("gatePassword");
+    const gateSubmit = document.getElementById("gateSubmit");
+    const gateError = document.getElementById("gateError");
     const modeButtons = document.querySelectorAll(".mode-btn");
     const editableNodes = [...document.querySelectorAll(".editable[data-key]")];
     const saveButton = document.getElementById("saveEditsBtn");
@@ -1465,6 +1556,21 @@
     editableNodes.forEach((node) => {
       defaults[node.dataset.key] = node.innerHTML;
     });
+
+    function unlockPage() {
+      accessGate.classList.add("hidden");
+      body.classList.remove("locked");
+      sessionStorage.setItem(ACCESS_STORAGE_KEY, "ok");
+    }
+
+    function tryUnlock() {
+      if (gatePassword.value === ACCESS_PASSWORD) {
+        gateError.textContent = "";
+        unlockPage();
+      } else {
+        gateError.textContent = "密码不正确，请重新输入。";
+      }
+    }
 
     function setMode(mode) {
       body.classList.remove("read-mode", "presentation-mode", "edit-mode");
@@ -1570,6 +1676,10 @@
     });
 
     document.addEventListener("keydown", (event) => {
+      if (!accessGate.classList.contains("hidden") && event.key === "Enter") {
+        tryUnlock();
+        return;
+      }
       if (!body.classList.contains("presentation-mode")) return;
       if (event.key === "ArrowRight" || event.key === "PageDown") {
         currentSlide = (currentSlide + 1) % slides.length;
@@ -1583,6 +1693,10 @@
 
     buildDots();
     loadEdits();
+    if (sessionStorage.getItem(ACCESS_STORAGE_KEY) === "ok") {
+      unlockPage();
+    }
+    gateSubmit.addEventListener("click", tryUnlock);
     setMode("read");
     updateSlide();
   </script>
