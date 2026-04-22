@@ -343,7 +343,10 @@
     .matrix-grid,
     .platform-grid,
     .case-grid,
-    .source-grid {
+    .source-grid,
+    .library-grid,
+    .brand-grid,
+    .update-grid {
       display: grid;
       gap: 18px;
     }
@@ -580,6 +583,100 @@
       color: var(--ink);
       font-size: 14px;
     }
+    .library-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .library-card {
+      padding: 22px;
+      border-radius: 22px;
+      background: var(--paper);
+      border: 1px solid rgba(255,255,255,0.44);
+    }
+    .library-card h3,
+    .update-card h3,
+    .brand-card h3 {
+      margin: 0 0 10px;
+      font-size: 22px;
+    }
+    .library-card p,
+    .update-card p,
+    .brand-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .library-link-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 16px;
+    }
+    .library-link {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.58);
+      border: 1px solid rgba(22, 35, 58, 0.08);
+      text-decoration: none;
+      font-size: 13px;
+    }
+    .library-link strong {
+      font-size: 14px;
+    }
+    .brand-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .brand-card {
+      padding: 20px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.58);
+      border: 1px solid rgba(22, 35, 58, 0.08);
+    }
+    .brand-meta {
+      display: inline-flex;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: rgba(22, 35, 58, 0.06);
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .brand-card ul {
+      margin: 14px 0 0;
+      padding-left: 18px;
+    }
+    .brand-card li {
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+    .update-grid {
+      grid-template-columns: 1.1fr 0.9fr;
+    }
+    .update-card {
+      padding: 22px;
+      border-radius: 22px;
+      background: var(--paper);
+      border: 1px solid rgba(255,255,255,0.44);
+    }
+    .update-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 16px;
+    }
+    .update-item {
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.56);
+      border: 1px solid rgba(22, 35, 58, 0.08);
+      font-size: 14px;
+    }
+    .update-item strong {
+      display: block;
+      margin-bottom: 4px;
+    }
     .advice-grid,
     .taxonomy-grid {
       display: grid;
@@ -756,13 +853,16 @@
       .metric-grid,
       .matrix-grid,
       .case-grid,
-      .source-grid {
+      .source-grid,
+      .library-grid,
+      .brand-grid {
         grid-template-columns: 1fr 1fr;
       }
       .summary-grid,
       .platform-grid,
       .hero-grid,
-      .slide-grid {
+      .slide-grid,
+      .update-grid {
         grid-template-columns: 1fr;
       }
     }
@@ -790,6 +890,8 @@
       .matrix-grid,
       .case-grid,
       .source-grid,
+      .library-grid,
+      .brand-grid,
       .mini-row {
         grid-template-columns: 1fr;
       }
@@ -844,15 +946,15 @@
         <div class="brand-mark">AI</div>
         <div class="brand-copy">
           <strong>云端推理芯片与部署研究</strong>
-          <span>阅读、演示、在线编辑、PDF 导出一体化单页</span>
+          <span>持续更新的资料库：专题入口、品牌入口、演示与导出共用一页</span>
         </div>
       </div>
       <div class="toolbar-actions">
         <div class="toolbar-nav">
-          <a href="#summary">摘要</a>
-          <a href="#matrix">选型</a>
-          <a href="#platforms">平台</a>
-          <a href="#selection-table">选型表</a>
+          <a href="#summary">总览</a>
+          <a href="#updates">更新</a>
+          <a href="#topic-hub">专题库</a>
+          <a href="#brand-library">品牌库</a>
           <a href="#cost-breakdown">成本</a>
           <a href="#poc-checklist">PoC</a>
           <a href="#cases">案例</a>
@@ -879,10 +981,10 @@
           <div class="hero-grid">
             <div>
               <h1 class="hero-title editable" data-key="hero_title">把芯片选择、系统互联、机柜热密度，放到同一张决策图里。</h1>
-              <p class="hero-copy editable" data-key="hero_copy">这不是单纯的“谁的 TOPS 更高”报告，而是一个面向部署落地的观察框架：大模型推理进入显存与系统工程时代，小模型服务则继续由功耗、成本与运维复杂度主导。这个单页版本面向现场演示、移动端阅读，以及按需改字后导出 PDF。</p>
+              <p class="hero-copy editable" data-key="hero_copy">这不是单纯的“谁的 TOPS 更高”报告，而是一份可持续更新的推理芯片资料库：用同一套页面同时承载新信息补充、旧资料替换、现场演示和 PDF 导出。大模型推理进入显存与系统工程时代，小模型服务则继续由功耗、成本与运维复杂度主导。</p>
               <div class="hero-actions">
-                <a class="hero-link" href="#matrix">先看怎么选平台</a>
-                <a class="hero-link" href="#cases">看三类部署案例</a>
+                <a class="hero-link" href="#topic-hub">先看专题库入口</a>
+                <a class="hero-link" href="#brand-library">看品牌库入口</a>
                 <a class="hero-link" href="javascript:void(0)" id="enterPresentationLink">切换到演示模式</a>
               </div>
             </div>
@@ -926,8 +1028,8 @@
         <main class="stack">
           <section class="section-card" id="summary">
             <div class="section-title">
-              <div><h2 class="editable" data-key="summary_title">执行摘要</h2></div>
-              <p class="editable" data-key="summary_desc">这份网页把原文拆成“结论先行 + 决策路径 + 平台卡片 + 典型案例”的阅读顺序，更适合现场演示、手机浏览和后续再编辑。</p>
+              <div><h2 class="editable" data-key="summary_title">资料库总览</h2></div>
+              <p class="editable" data-key="summary_desc">这份网页已经从“演示单页”改成“持续更新资料库”：一层给结论，一层给专题，一层给品牌，一层给证据与更新记录。</p>
             </div>
             <div class="summary-grid">
               <div class="subcard">
@@ -946,6 +1048,148 @@
                   <div class="bullet-item"><div class="editable" data-key="summary_q3"><strong>先问故障域：</strong>做单节点大副本，还是多节点分片？这两条路对网络、配电和运维策略要求完全不同。</div></div>
                 </div>
               </div>
+            </div>
+          </section>
+
+          <section class="section-card" id="updates">
+            <div class="section-title">
+              <div><h2>更新与维护</h2></div>
+              <p>后续的新增信息和旧资料替换，统一先落到这里，保证整页始终能说明“最近改了什么、依据是什么、接下来补什么”。</p>
+            </div>
+            <div class="update-grid">
+              <article class="update-card">
+                <h3>最近更新</h3>
+                <p>当前版本把原本按章节展开的报告，重构为“总览 + 专题库 + 品牌库 + 证据层”的资料库结构，后续新增内容不再靠继续往下堆长文。</p>
+                <div class="update-list">
+                  <div class="update-item">
+                    <strong>2026-04-22 结构升级</strong>
+                    新增专题库入口、品牌库入口、更新与维护区，后续补品牌、补 benchmark、替换旧指标时都有固定挂载点。
+                  </div>
+                  <div class="update-item">
+                    <strong>2026-04-22 决策内容补齐</strong>
+                    已纳入选型结论表、单柜/多柜成本拆分、PoC 清单、70B/405B 部署边界、采购建议、来源可信度分层。
+                  </div>
+                  <div class="update-item">
+                    <strong>后续优先级</strong>
+                    优先补 2026 年国际/国产主线平台的统一口径性能指标，再逐步补扩展观察池与品牌级别更新日志。
+                  </div>
+                </div>
+              </article>
+              <article class="update-card">
+                <h3>维护规则</h3>
+                <p>为了让这页适合长期使用，新增和替换都按固定规则进入，不允许把不同口径的数据直接混排。</p>
+                <div class="bullet-list">
+                  <div class="bullet-item"><div><strong>新增信息：</strong>优先补到专题库或品牌库，不直接塞进首页总览。</div></div>
+                  <div class="bullet-item"><div><strong>旧资料更新：</strong>保留最新结论，同时在本区标记替换日期和口径变化。</div></div>
+                  <div class="bullet-item"><div><strong>数据引用：</strong>优先官方规格、MLPerf、云厂商价格和官方性能页，其他来源降级标注。</div></div>
+                  <div class="bullet-item"><div><strong>演示同步：</strong>演示模式只抽取总览与结论，不再维护另一套独立正文。</div></div>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <section class="section-card" id="topic-hub">
+            <div class="section-title">
+              <div><h2>专题库入口</h2></div>
+              <p>专题库负责横向比较。后面新增性能、成本、部署和采购信息时，优先从这里扩展，而不是新增一串新的平级章节。</p>
+            </div>
+            <div class="library-grid">
+              <article class="library-card">
+                <h3>决策专题</h3>
+                <p>把“怎么选”和“边界在哪”放在最前面，适合汇报和方案评审。</p>
+                <div class="library-link-list">
+                  <a class="library-link" href="#matrix"><span><strong>选型矩阵</strong><br>按负载与组织约束先分层</span><span>进入</span></a>
+                  <a class="library-link" href="#selection-table"><span><strong>芯片选型结论表</strong><br>把推荐、不推荐和风险压成总表</span><span>进入</span></a>
+                  <a class="library-link" href="#deployment-boundary"><span><strong>70B / 405B 部署边界</strong><br>明确单节点、多节点和液冷分界</span><span>进入</span></a>
+                </div>
+              </article>
+              <article class="library-card">
+                <h3>验证专题</h3>
+                <p>统一 PoC 口径，避免厂商 benchmark 和实际交付脱节。</p>
+                <div class="library-link-list">
+                  <a class="library-link" href="#poc-checklist"><span><strong>PoC 清单</strong><br>兼容、吞吐、TTFT、P99、供货、售后</span><span>进入</span></a>
+                  <a class="library-link" href="#source-trust"><span><strong>来源可信度分层</strong><br>把硬依据和工程推断分开</span><span>进入</span></a>
+                  <a class="library-link" href="#sources"><span><strong>主要来源</strong><br>汇总核心官方链接</span><span>进入</span></a>
+                </div>
+              </article>
+              <article class="library-card">
+                <h3>经营专题</h3>
+                <p>把成本、案例和采购建议拉到同一条线上，便于做预算与落地判断。</p>
+                <div class="library-link-list">
+                  <a class="library-link" href="#cost-breakdown"><span><strong>单柜 / 多柜成本拆分</strong><br>拆清服务器、交换、制冷、配电、运维</span><span>进入</span></a>
+                  <a class="library-link" href="#procurement-advice"><span><strong>典型采购建议</strong><br>按组织类型给起步配置和踩坑点</span><span>进入</span></a>
+                  <a class="library-link" href="#cases"><span><strong>典型部署案例</strong><br>单柜到多柜的场景化样例</span><span>进入</span></a>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <section class="section-card" id="brand-library">
+            <div class="section-title">
+              <div><h2>品牌库入口</h2></div>
+              <p>品牌库负责纵向追踪。以后你补某个品牌的新型号、旧型号退场、驱动成熟度变化，都可以挂在对应品牌线上，而不是把信息散进各个专题段落。</p>
+            </div>
+            <div class="brand-grid">
+              <article class="brand-card">
+                <span class="brand-meta">International GPU</span>
+                <h3>NVIDIA / AMD / Intel</h3>
+                <p>适合作为通用 GPU 路线主线，重点跟踪显存、互联、推理软件栈和公开 benchmark。</p>
+                <ul>
+                  <li>NVIDIA：H100、H200、B200、GB200 / NVL72</li>
+                  <li>AMD：MI300X、MI325X</li>
+                  <li>Intel：Gaudi 3</li>
+                </ul>
+              </article>
+              <article class="brand-card">
+                <span class="brand-meta">Cloud ASIC</span>
+                <h3>Google TPU / AWS Neuron</h3>
+                <p>适合单独跟踪云上吞吐/成本效率路线，重点看实例价格、特定负载吞吐和生态兼容。</p>
+                <ul>
+                  <li>Google：TPU v5e、Trillium</li>
+                  <li>AWS：Inferentia2、Trainium2</li>
+                  <li>适合与 GPU 路线做“特定任务性价比”对照</li>
+                </ul>
+              </article>
+              <article class="brand-card">
+                <span class="brand-meta">Domestic Mainline</span>
+                <h3>昇腾 / 寒武纪 / 算能</h3>
+                <p>适合作为国产主线，重点跟踪私有化交付、框架兼容、量化路径、供货和本地服务能力。</p>
+                <ul>
+                  <li>华为昇腾：Atlas 300I、910 系列、超节点路线</li>
+                  <li>寒武纪：MLU370-X8 与云端方案</li>
+                  <li>算能：BM1684X 及边缘到云协同场景</li>
+                </ul>
+              </article>
+              <article class="brand-card">
+                <span class="brand-meta">Domestic Observation</span>
+                <h3>国产扩展观察池</h3>
+                <p>对公开、可统一口径横比的数据不足品牌，先进入观察池，不直接做硬排序。</p>
+                <ul>
+                  <li>壁仞、沐曦、摩尔线程、天数智芯</li>
+                  <li>海光、燧原、昆仑芯</li>
+                  <li>后续满足统一口径时再升入主对比表</li>
+                </ul>
+              </article>
+              <article class="brand-card">
+                <span class="brand-meta">Brand Update Rule</span>
+                <h3>品牌更新规则</h3>
+                <p>品牌页后续统一补这几类字段，避免每次新增信息都重写结构。</p>
+                <ul>
+                  <li>代表型号、内存/显存、互联、推理定位</li>
+                  <li>公开 benchmark / 官方性能页 / 云价</li>
+                  <li>适合场景、不推荐场景、关键风险</li>
+                </ul>
+              </article>
+              <article class="brand-card">
+                <span class="brand-meta">Deep Dive</span>
+                <h3>品牌深潜入口</h3>
+                <p>下面的“平台图谱”继续作为品牌库深潜区，用来放更详细的平台路线和代表型号摘要。</p>
+                <ul>
+                  <li>国际主流平台深潜</li>
+                  <li>国产主流平台深潜</li>
+                  <li>后续可扩展到单品牌专卡</li>
+                </ul>
+              </article>
             </div>
           </section>
 
@@ -1000,8 +1244,8 @@
 
           <section class="section-card" id="platforms">
             <div class="section-title">
-              <div><h2 class="editable" data-key="platforms_title">平台图谱</h2></div>
-              <p class="editable" data-key="platforms_desc">国际阵营更透明，国产阵营更可控。真正的采购动作，通常需要把两者放在同一个 PoC 框架里比较。</p>
+              <div><h2 class="editable" data-key="platforms_title">品牌库深潜：平台图谱</h2></div>
+              <p class="editable" data-key="platforms_desc">这一段是品牌库的深潜层。上面先给入口和维护规则，这里再放主线平台的路线图与代表型号，便于后续持续更新。</p>
             </div>
             <div class="platform-grid">
               <article class="platform-card">
@@ -1385,7 +1629,7 @@
                 <a href="https://cloud.google.com/blog/products/compute/accelerating-ai-inference-with-google-cloud-tpus-and-gpus" target="_blank" rel="noreferrer">Google AI Inference Updates</a>
                 <a href="https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/arch/neuron-hardware/inferentia2.html" target="_blank" rel="noreferrer">AWS Inferentia2</a>
                 <a href="https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/arch/neuron-hardware/trainium2.html" target="_blank" rel="noreferrer">AWS Trainium2</a>
-                <a href="https://docs.mlcommons.org/inference_results_v5.0/" target="_blank" rel="noreferrer">MLPerf Inference v5.0</a>
+                <a href="https://mlcommons.org/2026/04/mlperf-inference-v6-0-results/" target="_blank" rel="noreferrer">MLPerf Inference v6.0</a>
               </article>
               <article class="source-card">
                 <h3>国产平台与部署</h3>
@@ -1437,85 +1681,106 @@
           </section>
 
           <section class="slide" data-slide="1">
-            <div class="slide-topline"><span>第二页</span><span>选型方法</span></div>
-            <h2 class="slide-title editable" data-key="slide2_title">先按负载类型分层，再看单芯片参数。</h2>
+            <div class="slide-topline"><span>第二页</span><span>资料库架构</span></div>
+            <h2 class="slide-title editable" data-key="slide2_title">这页已经从报告，升级成资料库入口。</h2>
             <div class="slide-grid">
               <div class="slide-panel">
-                <h3>小模型与感知任务</h3>
+                <h3>双入口</h3>
                 <ul>
-                  <li class="editable" data-key="slide2_l1">先看时延、成本和运维复杂度。</li>
-                  <li class="editable" data-key="slide2_l2">L4/L40S、Inferentia2、Atlas 300I、BM1684X 更常见。</li>
+                  <li class="editable" data-key="slide2_l1">专题库负责横向比较：性能、成本、部署、采购、来源。</li>
+                  <li class="editable" data-key="slide2_l2">品牌库负责纵向追踪：型号、互联、生态、更新记录。</li>
                 </ul>
               </div>
               <div class="slide-panel">
-                <h3>中大模型在线服务</h3>
+                <h3>长期维护</h3>
                 <ul>
-                  <li class="editable" data-key="slide2_l3">7B–70B 开始，显存容量与量化路径变成一线问题。</li>
-                  <li class="editable" data-key="slide2_l4">70B–405B 开始，系统架构往往比单卡压测更重要。</li>
+                  <li class="editable" data-key="slide2_l3">新增信息优先补专题或品牌，不再往首页堆长文。</li>
+                  <li class="editable" data-key="slide2_l4">旧资料更新统一写入更新区，明确日期与口径变化。</li>
                 </ul>
               </div>
             </div>
           </section>
 
           <section class="slide" data-slide="2">
-            <div class="slide-topline"><span>第三页</span><span>平台图谱</span></div>
-            <h2 class="slide-title editable" data-key="slide3_title">国际阵营更透明，国产阵营更可控。</h2>
+            <div class="slide-topline"><span>第三页</span><span>选型方法</span></div>
+            <h2 class="slide-title editable" data-key="slide3_title">先按负载类型分层，再看单芯片参数。</h2>
             <div class="slide-grid">
               <div class="slide-panel">
-                <h3>国际平台</h3>
+                <h3>小模型与感知任务</h3>
                 <ul>
-                  <li class="editable" data-key="slide3_l1">GPU、云 ASIC、超节点路线都已经成熟。</li>
-                  <li class="editable" data-key="slide3_l2">优点集中在公开 benchmark、推理生态与价格透明度。</li>
+                  <li class="editable" data-key="slide3_l1">先看时延、成本和运维复杂度。</li>
+                  <li class="editable" data-key="slide3_l2">L4/L40S、Inferentia2、Atlas 300I、BM1684X 更常见。</li>
                 </ul>
               </div>
               <div class="slide-panel">
-                <h3>国产平台</h3>
+                <h3>中大模型在线服务</h3>
                 <ul>
-                  <li class="editable" data-key="slide3_l3">适合数据主权、行业交付与私有化场景。</li>
-                  <li class="editable" data-key="slide3_l4">PoC 前要重点验证框架兼容与精度回归。</li>
+                  <li class="editable" data-key="slide3_l3">7B–70B 开始，显存容量与量化路径变成一线问题。</li>
+                  <li class="editable" data-key="slide3_l4">70B–405B 开始，系统架构往往比单卡压测更重要。</li>
                 </ul>
               </div>
             </div>
           </section>
 
           <section class="slide" data-slide="3">
-            <div class="slide-topline"><span>第四页</span><span>部署案例</span></div>
-            <h2 class="slide-title editable" data-key="slide4_title">不同规模的最优策略，并不相同。</h2>
+            <div class="slide-topline"><span>第四页</span><span>品牌库</span></div>
+            <h2 class="slide-title editable" data-key="slide4_title">国际阵营更透明，国产阵营更可控。</h2>
             <div class="slide-grid">
               <div class="slide-panel">
-                <h3>单机柜</h3>
+                <h3>国际平台</h3>
                 <ul>
-                  <li class="editable" data-key="slide4_l1">适合 7B–70B 低时延私有服务。</li>
-                  <li class="editable" data-key="slide4_l2">主要风险来自网络参数、NUMA 亲和和镜像一致性。</li>
+                  <li class="editable" data-key="slide4_l1">GPU、云 ASIC、超节点路线都已经成熟。</li>
+                  <li class="editable" data-key="slide4_l2">优点集中在公开 benchmark、推理生态与价格透明度。</li>
                 </ul>
               </div>
               <div class="slide-panel">
-                <h3>多机柜</h3>
+                <h3>国产平台</h3>
                 <ul>
-                  <li class="editable" data-key="slide4_l3">70B–405B 后更要重视故障域、prefill/decode 分离和跨机架通信。</li>
-                  <li class="editable" data-key="slide4_l4">大规模工厂化方案必须把液冷、电力、网络与平台软件放进同一项目组。</li>
+                  <li class="editable" data-key="slide4_l3">适合数据主权、行业交付与私有化场景。</li>
+                  <li class="editable" data-key="slide4_l4">PoC 前要重点验证框架兼容与精度回归。</li>
                 </ul>
               </div>
             </div>
           </section>
 
           <section class="slide" data-slide="4">
-            <div class="slide-topline"><span>第五页</span><span>结论</span></div>
-            <h2 class="slide-title editable" data-key="slide5_title">采购前先固定场景，再固定指标，再固定扩容路径。</h2>
-            <div class="slide-body editable" data-key="slide5_copy">如果只记住一句话：别用“大模型推理工厂”的方法做小规模部署，也别用“小模型轻量化”的思路去判断 405B 级服务集群。最优解取决于任务、网络、热密度和供应链边界是否匹配。</div>
+            <div class="slide-topline"><span>第五页</span><span>部署案例</span></div>
+            <h2 class="slide-title editable" data-key="slide5_title">不同规模的最优策略，并不相同。</h2>
+            <div class="slide-grid">
+              <div class="slide-panel">
+                <h3>单机柜</h3>
+                <ul>
+                  <li class="editable" data-key="slide5_l1">适合 7B–70B 低时延私有服务。</li>
+                  <li class="editable" data-key="slide5_l2">主要风险来自网络参数、NUMA 亲和和镜像一致性。</li>
+                </ul>
+              </div>
+              <div class="slide-panel">
+                <h3>多机柜</h3>
+                <ul>
+                  <li class="editable" data-key="slide5_l3">70B–405B 后更要重视故障域、prefill/decode 分离和跨机架通信。</li>
+                  <li class="editable" data-key="slide5_l4">大规模工厂化方案必须把液冷、电力、网络与平台软件放进同一项目组。</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <section class="slide" data-slide="5">
+            <div class="slide-topline"><span>第六页</span><span>更新治理</span></div>
+            <h2 class="slide-title editable" data-key="slide6_title">采购前先固定场景，再固定指标，再固定扩容路径。</h2>
+            <div class="slide-body editable" data-key="slide6_copy">如果只记住一句话：别用“大模型推理工厂”的方法做小规模部署，也别用“小模型轻量化”的思路去判断 405B 级服务集群。最优解取决于任务、网络、热密度和供应链边界是否匹配；资料库更新也必须按统一口径进入。</div>
             <div class="slide-grid">
               <div class="slide-panel">
                 <h3>适合小规模</h3>
                 <ul>
-                  <li class="editable" data-key="slide5_l1">BERT、推荐、OCR、视频理解、7B–13B 优先看低功耗高性价比平台。</li>
-                  <li class="editable" data-key="slide5_l2">PoC 阶段必须固定输入长度、并发和量化精度。</li>
+                  <li class="editable" data-key="slide6_l1">BERT、推荐、OCR、视频理解、7B–13B 优先看低功耗高性价比平台。</li>
+                  <li class="editable" data-key="slide6_l2">PoC 阶段必须固定输入长度、并发和量化精度。</li>
                 </ul>
               </div>
               <div class="slide-panel">
-                <h3>适合中大规模</h3>
+                <h3>适合持续更新</h3>
                 <ul>
-                  <li class="editable" data-key="slide5_l3">把网络当一等公民设计，至少分离计算、管理、存储三张网。</li>
-                  <li class="editable" data-key="slide5_l4">数据不出域或监管强时，应把国产路线放进同框 PoC。</li>
+                  <li class="editable" data-key="slide6_l3">把网络当一等公民设计，至少分离计算、管理、存储三张网。</li>
+                  <li class="editable" data-key="slide6_l4">新品牌、新型号、新 benchmark 统一先归入专题库或品牌库，再升级到首页结论。</li>
                 </ul>
               </div>
             </div>
@@ -1526,7 +1791,7 @@
       </div>
     </div>
 
-    <footer class="editable" data-key="footer_copy">根据原始文档《国内外云端推理芯片与单柜多柜部署研究报告》重构。当前版本支持阅读、演示、在线编辑与 PDF 导出。</footer>
+    <footer class="editable" data-key="footer_copy">根据原始文档《国内外云端推理芯片与单柜多柜部署研究报告》重构。当前版本已升级为持续更新资料库，支持专题入口、品牌入口、演示、在线编辑与 PDF 导出。</footer>
   </div>
 
   <script>
