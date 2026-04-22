@@ -1089,6 +1089,99 @@
       color: var(--muted);
       line-height: 1.5;
     }
+    .heatmap-card,
+    .source-ladder {
+      margin-top: 18px;
+      padding: 20px;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.56);
+      border: 1px solid rgba(22, 35, 58, 0.08);
+    }
+    .heatmap-grid {
+      display: grid;
+      grid-template-columns: 170px repeat(6, minmax(0, 1fr));
+      gap: 10px;
+      align-items: stretch;
+    }
+    .heatmap-head {
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding-bottom: 2px;
+    }
+    .heatmap-label {
+      display: flex;
+      align-items: center;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 10px 4px 10px 0;
+    }
+    .heatmap-cell {
+      min-height: 72px;
+      padding: 10px 8px;
+      border-radius: 14px;
+      border: 1px solid rgba(22, 35, 58, 0.08);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+    .fit-high {
+      background: rgba(31, 107, 112, 0.18);
+      color: #184d50;
+    }
+    .fit-mid {
+      background: rgba(216, 176, 99, 0.22);
+      color: #6d5420;
+    }
+    .fit-low {
+      background: rgba(182, 96, 61, 0.14);
+      color: #7a3f28;
+    }
+    .fit-watch {
+      background: rgba(22, 35, 58, 0.06);
+      color: var(--muted);
+    }
+    .source-grid-visual {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+    .source-step {
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.72);
+      border: 1px solid rgba(22, 35, 58, 0.08);
+      position: relative;
+    }
+    .source-step strong {
+      display: block;
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+    .source-step p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .source-step ul {
+      margin: 12px 0 0;
+      padding-left: 18px;
+    }
+    .source-step li {
+      margin-bottom: 7px;
+      font-size: 13px;
+    }
+    .source-rank {
+      display: inline-flex;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(22, 35, 58, 0.06);
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 10px;
+    }
 
     [contenteditable="true"] {
       outline: 2px dashed rgba(182, 96, 61, 0.28);
@@ -1271,6 +1364,10 @@
         grid-template-columns: 1fr;
       }
       .domestic-grid {
+        grid-template-columns: 1fr;
+      }
+      .heatmap-grid,
+      .source-grid-visual {
         grid-template-columns: 1fr;
       }
       .cost-stack {
@@ -1796,6 +1893,119 @@
                 </article>
               </div>
               <div class="section-note">这张图的用途不是证明谁“绝对更强”，而是把国产主线平台的公开规格先拉到同一个视图里。后续如果要做更严格的国产 vs 国际性能图，仍然要以统一模型、统一精度、统一 batch 和统一上下文长度为前提。</div>
+            </div>
+            <div class="heatmap-card">
+              <div class="section-title" style="margin-bottom:16px;">
+                <div><h2 style="font-size:28px;">场景适配热力图</h2></div>
+                <p>这张图不比较绝对性能，只回答“在什么场景下，哪条平台线更值得优先纳入 PoC 或采购清单”。颜色越深，代表越适合作为主候选。</p>
+              </div>
+              <div class="heatmap-grid">
+                <div class="heatmap-head">场景 / 平台线</div>
+                <div class="heatmap-head">国际 GPU</div>
+                <div class="heatmap-head">云 ASIC</div>
+                <div class="heatmap-head">昇腾</div>
+                <div class="heatmap-head">寒武纪</div>
+                <div class="heatmap-head">算能</div>
+                <div class="heatmap-head">观察池</div>
+
+                <div class="heatmap-label">轻量推理 / OCR / 推荐</div>
+                <div class="heatmap-cell fit-mid">可用，但常常偏贵<br>更适合已有 GPU 库存</div>
+                <div class="heatmap-cell fit-mid">云上成本可控<br>适合 API 化工作负载</div>
+                <div class="heatmap-cell fit-mid">可纳入内容审核 / 推理卡方案</div>
+                <div class="heatmap-cell fit-high">行业推理场景适配较强</div>
+                <div class="heatmap-cell fit-high">这类任务主战场之一</div>
+                <div class="heatmap-cell fit-watch">先看生态和交付成熟度</div>
+
+                <div class="heatmap-label">企业知识库 / 7B-14B 问答</div>
+                <div class="heatmap-cell fit-high">主流成熟路线<br>上手快</div>
+                <div class="heatmap-cell fit-mid">若已上云可优先试</div>
+                <div class="heatmap-cell fit-high">私有化和行业部署强</div>
+                <div class="heatmap-cell fit-mid">需要重点看框架兼容</div>
+                <div class="heatmap-cell fit-low">更适合轻量化模型，不宜硬顶</div>
+                <div class="heatmap-cell fit-watch">适合作为观察补充</div>
+
+                <div class="heatmap-label">视频解析 / 内容审核</div>
+                <div class="heatmap-cell fit-mid">能做，但未必最优</div>
+                <div class="heatmap-cell fit-low">通常不是优先路线</div>
+                <div class="heatmap-cell fit-high">编解码与审核场景强相关</div>
+                <div class="heatmap-cell fit-high">行业视频能力明确</div>
+                <div class="heatmap-cell fit-high">视频与边缘协同优势明显</div>
+                <div class="heatmap-cell fit-watch">优先观察垂直案例</div>
+
+                <div class="heatmap-label">政企私有化 / 数据不出域</div>
+                <div class="heatmap-cell fit-mid">可用，但主权与供给不占优</div>
+                <div class="heatmap-cell fit-low">受云平台边界影响</div>
+                <div class="heatmap-cell fit-high">主候选路线</div>
+                <div class="heatmap-cell fit-mid">适合作为行业补充 PoC</div>
+                <div class="heatmap-cell fit-mid">适合轻中型场景</div>
+                <div class="heatmap-cell fit-watch">可列观察，不宜先主推</div>
+
+                <div class="heatmap-label">70B-405B 大模型服务</div>
+                <div class="heatmap-cell fit-high">主流首选<br>显存/互联/生态更成熟</div>
+                <div class="heatmap-cell fit-mid">云内特定负载可强，但迁移性一般</div>
+                <div class="heatmap-cell fit-mid">超节点路线值得单列 PoC</div>
+                <div class="heatmap-cell fit-low">公开证据不足，不宜直接主推</div>
+                <div class="heatmap-cell fit-low">不建议作为主线</div>
+                <div class="heatmap-cell fit-watch">仅做观察</div>
+
+                <div class="heatmap-label">超大模型验证 / 多柜扩展</div>
+                <div class="heatmap-cell fit-high">国际 GPU / rack-scale 仍是主线</div>
+                <div class="heatmap-cell fit-mid">云内大规模推理可看，但供应商绑定强</div>
+                <div class="heatmap-cell fit-mid">适合做私有化超节点验证</div>
+                <div class="heatmap-cell fit-low">更多是行业补充，不是主线</div>
+                <div class="heatmap-cell fit-low">不适合</div>
+                <div class="heatmap-cell fit-watch">暂不建议做主判断</div>
+              </div>
+              <div class="section-note">这张图回答的是“先看谁”，不是“谁更强”。后续如果补单品牌案例或真实 PoC 结果，优先落到这一层，让页面从“规格判断”逐步升级到“场景经验判断”。</div>
+            </div>
+            <div class="source-ladder">
+              <div class="section-title" style="margin-bottom:16px;">
+                <div><h2 style="font-size:28px;">Benchmark / 来源图</h2></div>
+                <p>把这份资料库后续最该引用的 4 类证据拆开。这样你以后补新数据时，知道应该先找哪类来源，也知道每类来源能回答什么问题。</p>
+              </div>
+              <div class="source-grid-visual">
+                <article class="source-step">
+                  <span class="source-rank">Level 1</span>
+                  <strong>官方规格页</strong>
+                  <p>最适合回答静态能力边界：显存、带宽、互联、功耗、形态。</p>
+                  <ul>
+                    <li>NVIDIA / AMD / Intel 产品页</li>
+                    <li>Google TPU 文档、AWS Neuron 架构文档</li>
+                    <li>昇腾 / 寒武纪 / SOPHGO 官方规格页</li>
+                  </ul>
+                </article>
+                <article class="source-step">
+                  <span class="source-rank">Level 2</span>
+                  <strong>MLPerf v6.0</strong>
+                  <p>最适合回答可公开横比的标准 benchmark，尤其是国际主线平台。</p>
+                  <ul>
+                    <li>只对统一模型、统一场景、统一规则有效</li>
+                    <li>适合解释公开 benchmark 透明度</li>
+                    <li>不适合替代真实业务 PoC</li>
+                  </ul>
+                </article>
+                <article class="source-step">
+                  <span class="source-rank">Level 3</span>
+                  <strong>云实例价 / 平台价格页</strong>
+                  <p>最适合回答 tokens / 美元、租赁成本、上云试错成本。</p>
+                  <ul>
+                    <li>AWS / Google / CoreWeave / 云厂商实例页</li>
+                    <li>要注明时间点、区域和实例规格</li>
+                    <li>适合辅助判断，不是芯片静态能力</li>
+                  </ul>
+                </article>
+                <article class="source-step">
+                  <span class="source-rank">Level 4</span>
+                  <strong>官方性能页 / 白皮书</strong>
+                  <p>最适合回答特定模型或特定负载下的方向性优势，但不能和 MLPerf 混成一个总表。</p>
+                  <ul>
+                    <li>NVIDIA H200/H100 性能页</li>
+                    <li>AMD Instinct 比较页</li>
+                    <li>Intel Gaudi 白皮书与性能分析</li>
+                  </ul>
+                </article>
+              </div>
+              <div class="section-note">后面你继续补内容时，最稳的顺序是：先找官方规格，再找 MLPerf / 官方 benchmark，再找云价，再找厂商性能页。这样这份资料库会越来越完整，但不会越来越乱。</div>
             </div>
           </section>
 
