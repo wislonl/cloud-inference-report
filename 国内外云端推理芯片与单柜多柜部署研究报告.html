@@ -48,18 +48,18 @@
     }
 
     .toolbar {
-      position: sticky;
-      top: 10px;
-      z-index: 50;
+      position: relative;
+      z-index: 10;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 16px;
-      padding: 14px 18px;
-      border-radius: 999px;
+      padding: 18px 22px;
+      margin-bottom: 18px;
+      border-radius: 26px;
       background: rgba(18, 30, 51, 0.84);
       color: #f7f0e6;
-      box-shadow: 0 22px 60px rgba(10, 18, 34, 0.24);
+      box-shadow: 0 16px 40px rgba(10, 18, 34, 0.18);
       backdrop-filter: blur(18px);
     }
     .brand {
@@ -467,6 +467,75 @@
     .source-grid {
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
+    .dense-stack {
+      display: grid;
+      gap: 16px;
+    }
+    .report-table-wrap {
+      overflow-x: auto;
+      border-radius: 18px;
+      border: 1px solid rgba(22, 35, 58, 0.08);
+      background: rgba(255,255,255,0.5);
+    }
+    .report-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 880px;
+      font-size: 13px;
+    }
+    .report-table th,
+    .report-table td {
+      padding: 14px 14px;
+      border-bottom: 1px solid rgba(22, 35, 58, 0.08);
+      vertical-align: top;
+      text-align: left;
+    }
+    .report-table th {
+      background: rgba(22, 35, 58, 0.06);
+      color: var(--muted);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .report-table tr:last-child td {
+      border-bottom: 0;
+    }
+    .section-note {
+      margin-top: 16px;
+      padding: 16px 18px;
+      border-radius: 16px;
+      background: rgba(182, 96, 61, 0.08);
+      color: var(--ink);
+      font-size: 14px;
+    }
+    .advice-grid,
+    .taxonomy-grid {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .info-card {
+      padding: 20px;
+      border-radius: 18px;
+      background: var(--paper);
+      border: 1px solid rgba(255,255,255,0.44);
+    }
+    .info-card h3 {
+      margin: 0 0 10px;
+      font-size: 20px;
+    }
+    .info-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .info-card ul {
+      margin: 12px 0 0;
+      padding-left: 18px;
+    }
+    .info-card li {
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
     .case-meta {
       display: flex;
       gap: 8px;
@@ -631,7 +700,7 @@
       }
       .toolbar {
         position: static;
-        border-radius: 24px;
+        border-radius: 20px;
         align-items: flex-start;
         flex-direction: column;
       }
@@ -698,6 +767,9 @@
           <a href="#summary">摘要</a>
           <a href="#matrix">选型</a>
           <a href="#platforms">平台</a>
+          <a href="#selection-table">选型表</a>
+          <a href="#cost-breakdown">成本</a>
+          <a href="#poc-checklist">PoC</a>
           <a href="#cases">案例</a>
           <a href="#sources">来源</a>
         </div>
@@ -889,6 +961,271 @@
                   <div class="mini-row"><div>MLU370-X8</div><div>双芯 48GB LPDDR5</div><div>行业推理与本地可交付场景</div></div>
                 </div>
               </article>
+            </div>
+          </section>
+
+          <section class="section-card" id="selection-table">
+            <div class="section-title">
+              <div><h2>芯片选型结论表</h2></div>
+              <p>把“什么场景选什么平台”压缩为一页决策表，适合在汇报中快速回答为什么推荐、为什么不推荐、风险落在哪。</p>
+            </div>
+            <div class="report-table-wrap">
+              <table class="report-table">
+                <thead>
+                  <tr>
+                    <th>任务类型</th>
+                    <th>模型规模</th>
+                    <th>推荐平台</th>
+                    <th>原因</th>
+                    <th>不推荐方案</th>
+                    <th>关键风险</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="editable" data-key="sel_1_task">通用 LLM 在线问答</span></td>
+                    <td><span class="editable" data-key="sel_1_size">7B-13B</span></td>
+                    <td><span class="editable" data-key="sel_1_rec">单机 4-8 卡国产推理卡或国际主流 GPU</span></td>
+                    <td><span class="editable" data-key="sel_1_why">模型可单节点落地，建设成本可控，适合知识库问答与内部 Copilot。</span></td>
+                    <td><span class="editable" data-key="sel_1_bad">直接上超大集群或高规格液冷方案</span></td>
+                    <td><span class="editable" data-key="sel_1_risk">软件栈适配不足时，吞吐达标但时延不稳定。</span></td>
+                  </tr>
+                  <tr>
+                    <td><span class="editable" data-key="sel_2_task">企业内部知识助手</span></td>
+                    <td><span class="editable" data-key="sel_2_size">14B-32B</span></td>
+                    <td><span class="editable" data-key="sel_2_rec">单机 8 卡 GPU 服务器</span></td>
+                    <td><span class="editable" data-key="sel_2_why">兼顾精度、响应速度与后续扩容空间，适合中型企业私有化。</span></td>
+                    <td><span class="editable" data-key="sel_2_bad">仅用 CPU 集群硬顶大模型</span></td>
+                    <td><span class="editable" data-key="sel_2_risk">高峰并发时 TTFT 和 P99 易劣化。</span></td>
+                  </tr>
+                  <tr>
+                    <td><span class="editable" data-key="sel_3_task">代码生成与复杂推理</span></td>
+                    <td><span class="editable" data-key="sel_3_size">34B-70B</span></td>
+                    <td><span class="editable" data-key="sel_3_rec">8 卡高带宽互联 GPU 节点</span></td>
+                    <td><span class="editable" data-key="sel_3_why">显存带宽、框架兼容和张量并行要求高，成熟生态能显著降低调优周期。</span></td>
+                    <td><span class="editable" data-key="sel_3_bad">低互联带宽的多机松耦合集群</span></td>
+                    <td><span class="editable" data-key="sel_3_risk">多卡通信开销过大，实际吞吐可能低于预期。</span></td>
+                  </tr>
+                  <tr>
+                    <td><span class="editable" data-key="sel_4_task">多租户推理云服务</span></td>
+                    <td><span class="editable" data-key="sel_4_size">7B-70B 混部</span></td>
+                    <td><span class="editable" data-key="sel_4_rec">国际主流 GPU 平台或生态成熟的国产平台</span></td>
+                    <td><span class="editable" data-key="sel_4_why">调度工具链和监控体系更完善，利于多租户运营。</span></td>
+                    <td><span class="editable" data-key="sel_4_bad">仅按单模型满配采购</span></td>
+                    <td><span class="editable" data-key="sel_4_risk">资源碎片化严重，利用率偏低。</span></td>
+                  </tr>
+                  <tr>
+                    <td><span class="editable" data-key="sel_5_task">大模型蒸馏后的行业模型</span></td>
+                    <td><span class="editable" data-key="sel_5_size">7B-14B</span></td>
+                    <td><span class="editable" data-key="sel_5_rec">国产推理卡优先</span></td>
+                    <td><span class="editable" data-key="sel_5_why">成本、供货与本地化服务更有优势，适合政企定制部署。</span></td>
+                    <td><span class="editable" data-key="sel_5_bad">沿用训练型高端 GPU</span></td>
+                    <td><span class="editable" data-key="sel_5_risk">采购成本高，单位 token 成本不划算。</span></td>
+                  </tr>
+                  <tr>
+                    <td><span class="editable" data-key="sel_6_task">超大模型研究验证</span></td>
+                    <td><span class="editable" data-key="sel_6_size">70B-405B</span></td>
+                    <td><span class="editable" data-key="sel_6_rec">多节点高端 GPU 集群</span></td>
+                    <td><span class="editable" data-key="sel_6_why">需要成熟的并行框架、RDMA 网络和稳定驱动。</span></td>
+                    <td><span class="editable" data-key="sel_6_bad">单柜内强行堆叠完成全量部署</span></td>
+                    <td><span class="editable" data-key="sel_6_risk">机柜功耗、散热和通信瓶颈难以收敛。</span></td>
+                  </tr>
+                  <tr>
+                    <td><span class="editable" data-key="sel_7_task">边缘侧或分支机构推理</span></td>
+                    <td><span class="editable" data-key="sel_7_size">3B-7B</span></td>
+                    <td><span class="editable" data-key="sel_7_rec">小型国产加速卡或低功耗 GPU</span></td>
+                    <td><span class="editable" data-key="sel_7_why">更关注功耗、体积和易维护性，适合轻量问答与分类任务。</span></td>
+                    <td><span class="editable" data-key="sel_7_bad">数据中心级高功耗平台下沉</span></td>
+                    <td><span class="editable" data-key="sel_7_risk">成本和运维复杂度明显过高。</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="section-card" id="cost-breakdown">
+            <div class="section-title">
+              <div><h2>单柜 / 多柜成本拆分</h2></div>
+              <p>把 CAPEX 与 OPEX 拆开看，才能解释为什么“看似只是多买几台服务器”，最后却演变成网络、散热、配电和运维体系的重投入。</p>
+            </div>
+            <div class="report-table-wrap">
+              <table class="report-table">
+                <thead>
+                  <tr>
+                    <th>成本项</th>
+                    <th>单柜部署口径</th>
+                    <th>多柜部署口径</th>
+                    <th>成本变化趋势</th>
+                    <th>说明</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>服务器</td><td>1-4 台高密度 GPU 服务器</td><td>随节点数增加线性上升</td><td>显著上升</td><td>CAPEX 最大项，决定基础算力与显存容量。</td></tr>
+                  <tr><td>交换机</td><td>柜内 ToR 或较低规模高速交换</td><td>需增加 Spine/Leaf 或更高规格高速交换</td><td>快速上升</td><td>多柜部署后，网络成本占比明显提升。</td></tr>
+                  <tr><td>存储</td><td>本地 NVMe 或小规模共享存储</td><td>集中式高性能存储或分布式存储</td><td>中度上升</td><td>模型权重、日志与检查点统一管理成本增加。</td></tr>
+                  <tr><td>液冷 / 风冷</td><td>中低功率场景可维持高规格风冷</td><td>高功率密度场景通常需要液冷或行级制冷</td><td>阶跃上升</td><td>功率密度超过机房承载能力时，冷却成本突增。</td></tr>
+                  <tr><td>配电</td><td>单柜内配电改造相对简单</td><td>需综合评估 UPS、PDU、母线及冗余设计</td><td>中高上升</td><td>多柜部署对电力冗余和持续供电能力要求更高。</td></tr>
+                  <tr><td>机柜</td><td>单柜成本可控</td><td>机柜数量、布线与占地同步增加</td><td>线性上升</td><td>常被低估，但会持续推高基础设施投入。</td></tr>
+                  <tr><td>电费</td><td>功耗总量相对可控</td><td>节点数上升后电费成为核心 OPEX</td><td>持续上升</td><td>大模型常态化推理时，电费会长期侵蚀单位 token 成本。</td></tr>
+                  <tr><td>运维</td><td>以单点维护、人工值守为主</td><td>需引入监控、调度、容量管理和故障演练体系</td><td>非线性上升</td><td>多柜后运维复杂度往往高于硬件数量的线性增长。</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="section-note editable" data-key="cost_note">总体来看，单柜部署适合 PoC、试运营和中小规模私有化场景，优势是决策快、建设周期短、CAPEX 可控；多柜部署适合高并发、多模型混部及超大模型场景，扩展性强，但网络、制冷、配电与运维体系会显著抬升总体拥有成本。</div>
+          </section>
+
+          <section class="section-card" id="poc-checklist">
+            <div class="section-title">
+              <div><h2>国产 vs 国际平台 PoC 清单</h2></div>
+              <p>PoC 不应只验证“模型能不能跑通”，更应验证“上线后能不能稳定交付”。统一指标口径，比单看厂商 benchmark 更有管理价值。</p>
+            </div>
+            <div class="report-table-wrap">
+              <table class="report-table">
+                <thead>
+                  <tr>
+                    <th>评估维度</th>
+                    <th>验证要点</th>
+                    <th>国产平台关注点</th>
+                    <th>国际平台关注点</th>
+                    <th>建议验收口径</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>框架兼容</td><td>PyTorch、vLLM、TensorRT-LLM、主流 serving 框架是否稳定</td><td>重点确认适配版本、算子覆盖率与社区插件完整性</td><td>生态更成熟，但仍需确认特定模型支持情况</td><td>目标模型与目标框架完成全链路跑通</td></tr>
+                  <tr><td>量化精度</td><td>INT8、FP8、BF16 等精度下效果损失是否可控</td><td>确认量化工具链与校准流程成熟度</td><td>方案更丰富，但需关注许可和版本绑定</td><td>核心业务任务精度损失在可接受范围内</td></tr>
+                  <tr><td>吞吐</td><td>单位时间 token 输出能力是否满足目标并发</td><td>重点看实测而非理论峰值</td><td>排查不同 batch 策略下的性能波动</td><td>统一 prompt、batch、上下文长度后测得吞吐</td></tr>
+                  <tr><td>TTFT</td><td>首 token 返回时延是否满足交互体验</td><td>驱动与调度优化不足时 TTFT 易偏高</td><td>成熟生态通常优势更明显</td><td>P50、P95 TTFT 同时达标</td></tr>
+                  <tr><td>P99</td><td>高峰尾时延是否可控</td><td>多租户和高并发下更需重点验证</td><td>确认持续压测下是否出现抖动</td><td>P99 不超过业务 SLA 上限</td></tr>
+                  <tr><td>驱动成熟度</td><td>长时间运行是否稳定，升级是否可控</td><td>看驱动、固件、编译链一致性</td><td>看版本兼容矩阵和升级风险</td><td>连续稳定运行 72 小时以上无严重故障</td></tr>
+                  <tr><td>供货周期</td><td>设备是否能按项目节奏交付</td><td>确认批量交付能力和区域供应稳定性</td><td>关注高端卡配额与地缘供应风险</td><td>形成明确交期承诺与替代方案</td></tr>
+                  <tr><td>售后能力</td><td>问题响应、驻场支持、备件体系是否完善</td><td>本地化支持通常是优势点</td><td>确认国内响应链路和服务时效</td><td>约定故障响应时间、备件与升级支持条款</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="section-note editable" data-key="poc_note">PoC 阶段建议坚持“统一模型、统一数据集、统一并发口径、统一统计指标”的原则，避免仅依据厂商单点 benchmark 做结论。最终应关注平台是否能在目标预算、目标交期与目标 SLA 下稳定交付。</div>
+          </section>
+
+          <section class="section-card" id="deployment-boundary">
+            <div class="section-title">
+              <div><h2>70B / 405B 部署边界</h2></div>
+              <p>70B 与 405B 不只是参数差异，更对应不同的节点组织方式、网络要求与制冷方式。这里把部署边界直接写清楚，便于前期排除不现实方案。</p>
+            </div>
+            <div class="report-table-wrap">
+              <table class="report-table">
+                <thead>
+                  <tr>
+                    <th>模型规模</th>
+                    <th>典型精度</th>
+                    <th>建议部署方式</th>
+                    <th>节点数量建议</th>
+                    <th>网络要求</th>
+                    <th>散热要求</th>
+                    <th>适用场景</th>
+                    <th>主要边界条件</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>70B</td><td>INT4/INT8</td><td>单节点优先，必要时双节点扩副本</td><td>1 节点起步</td><td>RoCE 非刚需，万兆可起步</td><td>高端风冷可覆盖</td><td>企业知识问答、代码助手</td><td>前提是并发不高、上下文长度受控</td></tr>
+                  <tr><td>70B</td><td>FP8/BF16</td><td>双节点或多节点更稳妥</td><td>2-4 节点</td><td>建议 100G 以上互联</td><td>高密部署建议液冷</td><td>高质量生成、复杂推理</td><td>显存占用和功耗显著抬升，单节点空间紧张</td></tr>
+                  <tr><td>70B</td><td>多副本服务化</td><td>单节点内做副本复制优于先做跨节点分片</td><td>1-2 节点</td><td>网络主要承载入口流量</td><td>风冷可行</td><td>中小规模线上推理</td><td>优先解决弹性与稳定性，不宜过早引入复杂并行</td></tr>
+                  <tr><td>405B</td><td>INT4/INT8</td><td>原则上跨节点分片</td><td>4-8 节点起步</td><td>高带宽低时延互联是前提</td><td>建议液冷</td><td>战略级大模型验证</td><td>若网络与调度不成熟，性能不稳定</td></tr>
+                  <tr><td>405B</td><td>FP8/BF16</td><td>多节点分片且对拓扑敏感</td><td>8 节点及以上</td><td>建议 200G/400G 级互联</td><td>液冷优先</td><td>高精度科研与旗舰推理</td><td>CAPEX、OPEX 和运维复杂度都高</td></tr>
+                  <tr><td>405B</td><td>生产集群化</td><td>不建议以少量节点硬上</td><td>8 节点以上并结合多柜规划</td><td>网络成为核心瓶颈</td><td>液冷+供配电协同设计</td><td>头部云、科研中心、运营商</td><td>需要成熟并行框架、监控与容灾体系</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="section-note editable" data-key="boundary_note">边界判断可以简化成一句话：70B 更适合先做单柜闭环，405B 更适合按多柜体系设计。不要把演示级配置误判为生产级方案。</div>
+          </section>
+
+          <section class="section-card" id="procurement-advice">
+            <div class="section-title">
+              <div><h2>典型采购建议</h2></div>
+              <p>采购不应只按“芯片先进程度”排序，而应把预算边界、交付周期、业务连续性和运维能力一起纳入判断。</p>
+            </div>
+            <div class="advice-grid">
+              <article class="info-card">
+                <h3>创业团队</h3>
+                <p>推荐起步配置：1 台推理服务器 + 基础存储 + 千兆/万兆网络，优先国际成熟生态或国产成熟 SKU。</p>
+                <ul>
+                  <li>采购重点：先把模型跑通、把 API 服务稳定。</li>
+                  <li>不建议踩坑：一开始就采购多柜和复杂网络。</li>
+                  <li>适用阶段：0 到 1 产品验证。</li>
+                </ul>
+              </article>
+              <article class="info-card">
+                <h3>中型企业私有化</h3>
+                <p>推荐起步配置：2-4 台服务器 + 基础共享存储 + 万兆/25G 网络，优先兼容主流框架且售后明确的平台。</p>
+                <ul>
+                  <li>采购重点：交付周期、运维简化、总拥有成本。</li>
+                  <li>不建议踩坑：只看芯片峰值参数，忽略系统集成。</li>
+                  <li>适用阶段：部门级到公司级内部落地。</li>
+                </ul>
+              </article>
+              <article class="info-card">
+                <h3>政企 / 运营商</h3>
+                <p>推荐起步配置：单柜起步，预留多柜扩展能力，配套交换与供配电方案，优先供货稳定、国产化路径清晰的平台。</p>
+                <ul>
+                  <li>采购重点：合规、供应保障、售后 SLA、生态适配。</li>
+                  <li>不建议踩坑：用实验室配置直接做正式采购。</li>
+                  <li>适用阶段：试点到规模化部署。</li>
+                </ul>
+              </article>
+              <article class="info-card">
+                <h3>科研 / HPC</h3>
+                <p>推荐起步配置：多节点集群 + 高速互联 + 并行文件系统，优先高带宽互联与大模型并行能力强的平台。</p>
+                <ul>
+                  <li>采购重点：混部能力、作业调度、精度支持。</li>
+                  <li>不建议踩坑：只按单卡指标判断整体效率。</li>
+                  <li>适用阶段：科研训练与超大模型推理。</li>
+                </ul>
+              </article>
+            </div>
+            <div class="section-note editable" data-key="advice_note">通用建议是分两阶段采购：先做 PoC 小批量验证，验证后再做规模采购。合同中应写清供货周期、驱动版本、售后边界，并尽量保留替代供应与回退路线。</div>
+          </section>
+
+          <section class="section-card" id="source-trust">
+            <div class="section-title">
+              <div><h2>来源可信度分层</h2></div>
+              <p>正式报告中的数据，必须区分“可直接引用的事实”和“用于工程判断的参考”。这样答辩时更稳，也更容易解释结论边界。</p>
+            </div>
+            <div class="taxonomy-grid">
+              <article class="info-card">
+                <h3>一级到三级：可作为硬依据</h3>
+                <ul>
+                  <li><strong>官方规格</strong>：官网 datasheet、白皮书，适合确认静态能力边界。</li>
+                  <li><strong>云厂商价格</strong>：用于租赁成本和初步 TCO 估算，需注明时间点与地区。</li>
+                  <li><strong>MLPerf / 公开 benchmark</strong>：适合做横向参考，但要核对模型、批大小和精度设置。</li>
+                </ul>
+              </article>
+              <article class="info-card">
+                <h3>四级到六级：用于补充与风险提示</h3>
+                <ul>
+                  <li><strong>厂商材料</strong>：可了解方向，但不能单独作为采购依据。</li>
+                  <li><strong>第三方实测</strong>：对工程判断有价值，但必须交叉验证。</li>
+                  <li><strong>生态推断</strong>：适合形成趋势判断，必须明确标注为“推断”。</li>
+                </ul>
+              </article>
+            </div>
+            <div class="report-table-wrap" style="margin-top:16px;">
+              <table class="report-table">
+                <thead>
+                  <tr>
+                    <th>来源层级</th>
+                    <th>定义</th>
+                    <th>典型来源</th>
+                    <th>适用内容</th>
+                    <th>使用建议</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>一级：官方规格</td><td>厂商正式发布的产品规格、接口、功耗说明</td><td>官网 datasheet、白皮书</td><td>芯片参数、服务器规格、接口数量</td><td>可直接引用，但不代表实际业务性能</td></tr>
+                  <tr><td>二级：云厂商价格</td><td>公开售卖或报价体系中的实例价格与计费信息</td><td>公有云官网、官方报价单</td><td>租赁成本、初步 TCO 估算</td><td>需注明时间点与地区差异</td></tr>
+                  <tr><td>三级：公开 benchmark</td><td>具备公开方法论和可复核条件的测试结果</td><td>MLPerf、公开评测报告</td><td>吞吐、延迟、单位成本比较</td><td>需核对测试模型、batch 与精度设置</td></tr>
+                  <tr><td>四级：厂商材料</td><td>厂商方案书、宣传 PPT、联合发布材料</td><td>市场材料、路演材料</td><td>场景案例、生态合作、能力宣称</td><td>仅作为选型参考，不单独作结论</td></tr>
+                  <tr><td>五级：第三方实测</td><td>集成商、媒体、社区或客户侧实测反馈</td><td>技术博客、社区评测</td><td>驱动成熟度、安装复杂度、真实稳定性</td><td>需交叉验证，不宜孤证定论</td></tr>
+                  <tr><td>六级：生态推断</td><td>根据框架支持、社区活跃度、供货信息做综合判断</td><td>兼容清单、社区 issue、渠道信息</td><td>供货风险、生态成熟度、未来可维护性</td><td>必须明确标注为“推断”</td></tr>
+                </tbody>
+              </table>
             </div>
           </section>
 
