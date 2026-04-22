@@ -726,6 +726,198 @@
       margin-top: 8px;
       word-break: break-word;
     }
+    .viz-grid {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin-bottom: 18px;
+    }
+    .viz-card {
+      padding: 18px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.56);
+      border: 1px solid rgba(22, 35, 58, 0.08);
+    }
+    .viz-card h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+    }
+    .viz-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .route-map {
+      display: grid;
+      gap: 14px;
+      margin-top: 18px;
+    }
+    .route-row {
+      display: grid;
+      grid-template-columns: 116px 1fr;
+      gap: 14px;
+      align-items: center;
+    }
+    .route-label {
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .route-track {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 12px;
+      border-radius: 18px;
+      background: rgba(22, 35, 58, 0.05);
+      border: 1px solid rgba(22, 35, 58, 0.08);
+    }
+    .route-node {
+      position: relative;
+      flex: 1 1 150px;
+      min-width: 140px;
+      padding: 14px 14px 12px;
+      border-radius: 16px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.86), rgba(247, 240, 230, 0.86));
+      border: 1px solid rgba(22, 35, 58, 0.08);
+    }
+    .route-node strong {
+      display: block;
+      font-size: 15px;
+      line-height: 1.2;
+    }
+    .route-node span {
+      display: block;
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .route-node.hot {
+      border-color: rgba(182, 96, 61, 0.28);
+      box-shadow: inset 0 0 0 1px rgba(182, 96, 61, 0.12);
+    }
+    .boundary-chart {
+      margin-top: 18px;
+      padding: 20px;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.56);
+      border: 1px solid rgba(22, 35, 58, 0.08);
+    }
+    .boundary-legend {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+    .legend-chip {
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      background: rgba(22, 35, 58, 0.06);
+      color: var(--muted);
+    }
+    .boundary-lanes {
+      display: grid;
+      gap: 12px;
+    }
+    .boundary-lane {
+      display: grid;
+      grid-template-columns: 130px 1fr;
+      gap: 12px;
+      align-items: center;
+    }
+    .lane-label {
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .lane-track {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .lane-cell {
+      min-height: 82px;
+      padding: 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(22, 35, 58, 0.08);
+      background: rgba(255,255,255,0.72);
+    }
+    .lane-cell strong {
+      display: block;
+      font-size: 14px;
+      line-height: 1.2;
+    }
+    .lane-cell span {
+      display: block;
+      margin-top: 6px;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+    .cell-light { background: linear-gradient(180deg, rgba(240, 214, 170, 0.34), rgba(255,255,255,0.9)); }
+    .cell-mid { background: linear-gradient(180deg, rgba(182, 96, 61, 0.18), rgba(255,255,255,0.9)); }
+    .cell-heavy { background: linear-gradient(180deg, rgba(31, 107, 112, 0.18), rgba(255,255,255,0.9)); }
+    .cost-bars {
+      display: grid;
+      gap: 16px;
+      margin-top: 18px;
+    }
+    .cost-bar-row {
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      gap: 14px;
+      align-items: center;
+    }
+    .cost-label {
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .cost-stack {
+      display: flex;
+      height: 54px;
+      overflow: hidden;
+      border-radius: 16px;
+      background: rgba(22, 35, 58, 0.06);
+      border: 1px solid rgba(22, 35, 58, 0.08);
+    }
+    .cost-seg {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 8px;
+      font-size: 11px;
+      color: #fff;
+      text-align: center;
+      line-height: 1.2;
+    }
+    .seg-server { background: #2b4269; }
+    .seg-switch { background: #1f6b70; }
+    .seg-storage { background: #4a8d88; }
+    .seg-cooling { background: #b6603d; }
+    .seg-power { background: #d18f58; }
+    .seg-electricity { background: #d8b063; color: #4c3a20; }
+    .seg-ops { background: #8d6a54; }
+    .cost-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .cost-legend span {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .cost-legend i {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+    }
 
     [contenteditable="true"] {
       outline: 2px dashed rgba(182, 96, 61, 0.28);
@@ -855,7 +1047,8 @@
       .case-grid,
       .source-grid,
       .library-grid,
-      .brand-grid {
+      .brand-grid,
+      .viz-grid {
         grid-template-columns: 1fr 1fr;
       }
       .summary-grid,
@@ -892,8 +1085,23 @@
       .source-grid,
       .library-grid,
       .brand-grid,
-      .mini-row {
+      .viz-grid,
+      .mini-row,
+      .lane-track {
         grid-template-columns: 1fr;
+      }
+      .route-row,
+      .boundary-lane,
+      .cost-bar-row {
+        grid-template-columns: 1fr;
+      }
+      .cost-stack {
+        height: auto;
+        min-height: 54px;
+        flex-wrap: wrap;
+      }
+      .cost-seg {
+        min-height: 44px;
       }
       .slide {
         min-height: calc(100vh - 130px);
@@ -1193,6 +1401,27 @@
             </div>
           </section>
 
+          <section class="section-card" id="visual-compare">
+            <div class="section-title">
+              <div><h2>图形化总览</h2></div>
+              <p>先用图把路线、边界和成本结构讲清楚，再看后面的表。这里优先展示口径相对稳定、不容易误导的三类图。</p>
+            </div>
+            <div class="viz-grid">
+              <article class="viz-card">
+                <h3>品牌路线图</h3>
+                <p>把国际 GPU、云 ASIC、国产主线、国产观察池拆成不同赛道，先看结构再看具体型号。</p>
+              </article>
+              <article class="viz-card">
+                <h3>部署边界图</h3>
+                <p>按模型规模与部署复杂度，直观看出何时还适合单节点，何时必须跨节点、上液冷。</p>
+              </article>
+              <article class="viz-card">
+                <h3>成本构成图</h3>
+                <p>把单柜和多柜的成本重心拆开，避免把“多柜”误解成服务器数量的线性叠加。</p>
+              </article>
+            </div>
+          </section>
+
           <section class="section-card" id="matrix">
             <div class="section-title">
               <div><h2 class="editable" data-key="matrix_title">选型矩阵</h2></div>
@@ -1246,6 +1475,39 @@
             <div class="section-title">
               <div><h2 class="editable" data-key="platforms_title">品牌库深潜：平台图谱</h2></div>
               <p class="editable" data-key="platforms_desc">这一段是品牌库的深潜层。上面先给入口和维护规则，这里再放主线平台的路线图与代表型号，便于后续持续更新。</p>
+            </div>
+            <div class="route-map">
+              <div class="route-row">
+                <div class="route-label">国际 GPU</div>
+                <div class="route-track">
+                  <div class="route-node hot"><strong>NVIDIA</strong><span>H100 → H200 → B200 → GB200 / NVL72<br>主线优势在显存、互联和公开生态</span></div>
+                  <div class="route-node"><strong>AMD</strong><span>MI300X → MI325X<br>高显存容量与长上下文性价比路线</span></div>
+                  <div class="route-node"><strong>Intel</strong><span>Gaudi 3<br>适合单独看特定工作负载吞吐/成本</span></div>
+                </div>
+              </div>
+              <div class="route-row">
+                <div class="route-label">云 ASIC</div>
+                <div class="route-track">
+                  <div class="route-node"><strong>Google TPU</strong><span>v5e → Trillium<br>适合云上固定负载、看单位吞吐与价格</span></div>
+                  <div class="route-node"><strong>AWS Neuron</strong><span>Inferentia2 / Trainium2<br>适合实例化成本效率路线</span></div>
+                </div>
+              </div>
+              <div class="route-row">
+                <div class="route-label">国产主线</div>
+                <div class="route-track">
+                  <div class="route-node hot"><strong>华为昇腾</strong><span>Atlas 300I、910 系列、超节点<br>私有化、行业交付和大模型主线</span></div>
+                  <div class="route-node"><strong>寒武纪</strong><span>MLU370-X8 与云端方案<br>行业推理和本地可交付场景</span></div>
+                  <div class="route-node"><strong>算能</strong><span>BM1684X<br>边缘到云协同、轻中型任务</span></div>
+                </div>
+              </div>
+              <div class="route-row">
+                <div class="route-label">观察池</div>
+                <div class="route-track">
+                  <div class="route-node"><strong>壁仞 / 沐曦</strong><span>优先跟踪公开 benchmark、驱动成熟度与供货</span></div>
+                  <div class="route-node"><strong>摩尔线程 / 天数智芯</strong><span>关注生态适配与行业项目落地情况</span></div>
+                  <div class="route-node"><strong>海光 / 燧原 / 昆仑芯</strong><span>先放观察池，不做统一口径硬排序</span></div>
+                </div>
+              </div>
             </div>
             <div class="platform-grid">
               <article class="platform-card">
@@ -1377,6 +1639,41 @@
               <div><h2>单柜 / 多柜成本拆分</h2></div>
               <p>把 CAPEX 与 OPEX 拆开看，才能解释为什么“看似只是多买几台服务器”，最后却演变成网络、散热、配电和运维体系的重投入。</p>
             </div>
+            <div class="cost-bars">
+              <div class="cost-bar-row">
+                <div class="cost-label">单柜部署</div>
+                <div class="cost-stack">
+                  <div class="cost-seg seg-server" style="width: 38%;">服务器</div>
+                  <div class="cost-seg seg-switch" style="width: 8%;">交换</div>
+                  <div class="cost-seg seg-storage" style="width: 9%;">存储</div>
+                  <div class="cost-seg seg-cooling" style="width: 10%;">制冷</div>
+                  <div class="cost-seg seg-power" style="width: 9%;">配电</div>
+                  <div class="cost-seg seg-electricity" style="width: 14%;">电费</div>
+                  <div class="cost-seg seg-ops" style="width: 12%;">运维</div>
+                </div>
+              </div>
+              <div class="cost-bar-row">
+                <div class="cost-label">多柜部署</div>
+                <div class="cost-stack">
+                  <div class="cost-seg seg-server" style="width: 29%;">服务器</div>
+                  <div class="cost-seg seg-switch" style="width: 14%;">交换</div>
+                  <div class="cost-seg seg-storage" style="width: 10%;">存储</div>
+                  <div class="cost-seg seg-cooling" style="width: 14%;">制冷</div>
+                  <div class="cost-seg seg-power" style="width: 11%;">配电</div>
+                  <div class="cost-seg seg-electricity" style="width: 11%;">电费</div>
+                  <div class="cost-seg seg-ops" style="width: 11%;">运维</div>
+                </div>
+              </div>
+              <div class="cost-legend">
+                <span><i class="seg-server"></i>服务器</span>
+                <span><i class="seg-switch"></i>交换机</span>
+                <span><i class="seg-storage"></i>存储</span>
+                <span><i class="seg-cooling"></i>液冷 / 风冷</span>
+                <span><i class="seg-power"></i>配电</span>
+                <span><i class="seg-electricity"></i>电费</span>
+                <span><i class="seg-ops"></i>运维</span>
+              </div>
+            </div>
             <div class="report-table-wrap">
               <table class="report-table">
                 <thead>
@@ -1438,6 +1735,42 @@
             <div class="section-title">
               <div><h2>70B / 405B 部署边界</h2></div>
               <p>70B 与 405B 不只是参数差异，更对应不同的节点组织方式、网络要求与制冷方式。这里把部署边界直接写清楚，便于前期排除不现实方案。</p>
+            </div>
+            <div class="boundary-chart">
+              <div class="boundary-legend">
+                <span class="legend-chip">横向从小模型到 405B+</span>
+                <span class="legend-chip">颜色越深，系统复杂度越高</span>
+                <span class="legend-chip">同一格先给建议部署，再给关键约束</span>
+              </div>
+              <div class="boundary-lanes">
+                <div class="boundary-lane">
+                  <div class="lane-label">单节点闭环</div>
+                  <div class="lane-track">
+                    <div class="lane-cell cell-light"><strong>7B-13B</strong><span>1 节点优先<br>风冷、万兆即可起步</span></div>
+                    <div class="lane-cell cell-light"><strong>14B-32B</strong><span>1 节点仍可控<br>看显存和并发上限</span></div>
+                    <div class="lane-cell cell-mid"><strong>34B-70B</strong><span>INT4/INT8 可守住单节点<br>副本优先于过早分片</span></div>
+                    <div class="lane-cell cell-heavy"><strong>405B+</strong><span>不适用<br>单节点思路失效</span></div>
+                  </div>
+                </div>
+                <div class="boundary-lane">
+                  <div class="lane-label">跨节点分片</div>
+                  <div class="lane-track">
+                    <div class="lane-cell cell-light"><strong>7B-13B</strong><span>通常不建议<br>复杂度高于收益</span></div>
+                    <div class="lane-cell cell-mid"><strong>14B-32B</strong><span>高精度或高并发时可用<br>需稳定互联</span></div>
+                    <div class="lane-cell cell-heavy"><strong>70B</strong><span>FP8/BF16 更常见<br>100G+ 互联更稳妥</span></div>
+                    <div class="lane-cell cell-heavy"><strong>405B</strong><span>原则上必须跨节点<br>200G/400G 级互联</span></div>
+                  </div>
+                </div>
+                <div class="boundary-lane">
+                  <div class="lane-label">多柜与液冷</div>
+                  <div class="lane-track">
+                    <div class="lane-cell cell-light"><strong>7B-13B</strong><span>一般不需要<br>先做单柜 PoC</span></div>
+                    <div class="lane-cell cell-mid"><strong>14B-32B</strong><span>多副本服务化时再考虑<br>电费开始敏感</span></div>
+                    <div class="lane-cell cell-heavy"><strong>70B-405B</strong><span>30kW/柜后建议液冷<br>故障域要提前设计</span></div>
+                    <div class="lane-cell cell-heavy"><strong>405B+</strong><span>按多柜体系设计<br>液冷、电力、网络协同</span></div>
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="report-table-wrap">
               <table class="report-table">
