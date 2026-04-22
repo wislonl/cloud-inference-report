@@ -138,30 +138,20 @@
     .brand {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 0;
       min-width: 0;
     }
-    .brand-mark {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      font-family: "Times New Roman", "Songti SC", serif;
-      font-size: 14px;
-      background: linear-gradient(145deg, #ddb27b, #99502f);
-      color: white;
-    }
-    .brand-copy strong,
+    .brand-title,
     .hero-title,
     .section-title h2,
     .slide-title,
     .metric strong {
       font-family: "Times New Roman", "Songti SC", "STSong", serif;
     }
-    .brand-copy strong {
+    .brand-title {
       display: block;
-      font-size: 13px;
+      font-size: 14px;
+      line-height: 1.1;
     }
     .toolbar-actions {
       display: flex;
@@ -1558,10 +1548,7 @@
   <div class="app">
     <div class="toolbar">
       <div class="brand">
-        <div class="brand-mark">AI</div>
-        <div class="brand-copy">
-          <strong>云端推理芯片与部署研究</strong>
-        </div>
+        <strong class="brand-title">云端推理芯片与部署研究</strong>
       </div>
       <div class="toolbar-actions">
         <div class="toolbar-nav">
