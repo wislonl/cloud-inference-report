@@ -918,6 +918,112 @@
       height: 12px;
       border-radius: 999px;
     }
+    .spec-chart {
+      display: grid;
+      gap: 14px;
+      margin-top: 18px;
+      padding: 20px;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.56);
+      border: 1px solid rgba(22, 35, 58, 0.08);
+    }
+    .spec-row {
+      display: grid;
+      grid-template-columns: 160px 1fr 82px 1fr 82px;
+      gap: 12px;
+      align-items: center;
+    }
+    .spec-name {
+      font-size: 13px;
+      color: var(--ink);
+      font-weight: 600;
+    }
+    .spec-bar {
+      height: 16px;
+      border-radius: 999px;
+      background: rgba(22, 35, 58, 0.08);
+      overflow: hidden;
+      position: relative;
+    }
+    .spec-fill {
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #2b4269, #1f6b70);
+    }
+    .spec-fill.bandwidth {
+      background: linear-gradient(90deg, #b6603d, #d8b063);
+    }
+    .spec-value {
+      font-size: 12px;
+      color: var(--muted);
+      text-align: right;
+      white-space: nowrap;
+    }
+    .spec-head {
+      display: grid;
+      grid-template-columns: 160px 1fr 82px 1fr 82px;
+      gap: 12px;
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .evidence-matrix {
+      margin-top: 18px;
+      padding: 20px;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.56);
+      border: 1px solid rgba(22, 35, 58, 0.08);
+    }
+    .evidence-head,
+    .evidence-row {
+      display: grid;
+      grid-template-columns: 170px repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      align-items: center;
+    }
+    .evidence-head {
+      margin-bottom: 10px;
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .evidence-row {
+      padding: 10px 0;
+      border-top: 1px solid rgba(22, 35, 58, 0.08);
+    }
+    .evidence-row:first-of-type {
+      border-top: 0;
+    }
+    .evidence-name {
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .evidence-cell {
+      padding: 10px 8px;
+      border-radius: 12px;
+      text-align: center;
+      font-size: 12px;
+      line-height: 1.35;
+      border: 1px solid rgba(22, 35, 58, 0.08);
+    }
+    .evidence-high {
+      background: rgba(31, 107, 112, 0.16);
+      color: #184d50;
+    }
+    .evidence-mid {
+      background: rgba(216, 176, 99, 0.22);
+      color: #6d5420;
+    }
+    .evidence-low {
+      background: rgba(182, 96, 61, 0.14);
+      color: #7a3f28;
+    }
+    .evidence-none {
+      background: rgba(22, 35, 58, 0.05);
+      color: var(--muted);
+    }
 
     [contenteditable="true"] {
       outline: 2px dashed rgba(182, 96, 61, 0.28);
@@ -1092,7 +1198,11 @@
       }
       .route-row,
       .boundary-lane,
-      .cost-bar-row {
+      .cost-bar-row,
+      .spec-head,
+      .spec-row,
+      .evidence-head,
+      .evidence-row {
         grid-template-columns: 1fr;
       }
       .cost-stack {
@@ -1419,6 +1529,139 @@
                 <h3>成本构成图</h3>
                 <p>把单柜和多柜的成本重心拆开，避免把“多柜”误解成服务器数量的线性叠加。</p>
               </article>
+            </div>
+          </section>
+
+          <section class="section-card" id="performance-visuals">
+            <div class="section-title">
+              <div><h2>性能对比图</h2></div>
+              <p>这里把“能硬比的硬指标”和“暂时不能硬比但能说明公开透明度的证据层”分开。前半部分只用官方规格，后半部分只表达公开可得性，不做综合打分。</p>
+            </div>
+            <div class="spec-chart">
+              <div class="spec-head">
+                <div>平台</div>
+                <div>显存 / 设备内存</div>
+                <div>容量</div>
+                <div>带宽</div>
+                <div>带宽</div>
+              </div>
+              <div class="spec-row">
+                <div class="spec-name">NVIDIA H100 SXM</div>
+                <div class="spec-bar"><div class="spec-fill" style="width:31%;"></div></div>
+                <div class="spec-value">80GB</div>
+                <div class="spec-bar"><div class="spec-fill bandwidth" style="width:56%;"></div></div>
+                <div class="spec-value">3.35TB/s</div>
+              </div>
+              <div class="spec-row">
+                <div class="spec-name">NVIDIA H200 SXM</div>
+                <div class="spec-bar"><div class="spec-fill" style="width:55%;"></div></div>
+                <div class="spec-value">141GB</div>
+                <div class="spec-bar"><div class="spec-fill bandwidth" style="width:80%;"></div></div>
+                <div class="spec-value">4.8TB/s</div>
+              </div>
+              <div class="spec-row">
+                <div class="spec-name">AMD MI300X</div>
+                <div class="spec-bar"><div class="spec-fill" style="width:75%;"></div></div>
+                <div class="spec-value">192GB</div>
+                <div class="spec-bar"><div class="spec-fill bandwidth" style="width:88%;"></div></div>
+                <div class="spec-value">5.3TB/s</div>
+              </div>
+              <div class="spec-row">
+                <div class="spec-name">AMD MI325X</div>
+                <div class="spec-bar"><div class="spec-fill" style="width:100%;"></div></div>
+                <div class="spec-value">256GB</div>
+                <div class="spec-bar"><div class="spec-fill bandwidth" style="width:100%;"></div></div>
+                <div class="spec-value">6.0TB/s</div>
+              </div>
+              <div class="spec-row">
+                <div class="spec-name">Intel Gaudi 3</div>
+                <div class="spec-bar"><div class="spec-fill" style="width:50%;"></div></div>
+                <div class="spec-value">128GB</div>
+                <div class="spec-bar"><div class="spec-fill bandwidth" style="width:62%;"></div></div>
+                <div class="spec-value">3.7TB/s</div>
+              </div>
+              <div class="spec-row">
+                <div class="spec-name">AWS Trainium2</div>
+                <div class="spec-bar"><div class="spec-fill" style="width:38%;"></div></div>
+                <div class="spec-value">96GiB</div>
+                <div class="spec-bar"><div class="spec-fill bandwidth" style="width:48%;"></div></div>
+                <div class="spec-value">2.9TB/s</div>
+              </div>
+              <div class="spec-row">
+                <div class="spec-name">Google TPU v5e</div>
+                <div class="spec-bar"><div class="spec-fill" style="width:6%;"></div></div>
+                <div class="spec-value">16GB</div>
+                <div class="spec-bar"><div class="spec-fill bandwidth" style="width:14%;"></div></div>
+                <div class="spec-value">819GB/s</div>
+              </div>
+              <div class="section-note">这张图只比较公开官方规格中的“单加速器内存容量”和“本地内存带宽”，适合解释为什么 70B-405B 场景更容易先被显存和带宽卡住；它不是吞吐排名，也不能替代统一口径 benchmark。</div>
+            </div>
+            <div class="evidence-matrix">
+              <div class="evidence-head">
+                <div>平台线</div>
+                <div>官方规格</div>
+                <div>公开 benchmark</div>
+                <div>云价 / 实例价</div>
+                <div>推理栈透明度</div>
+                <div>跨平台可横比性</div>
+              </div>
+              <div class="evidence-row">
+                <div class="evidence-name">NVIDIA</div>
+                <div class="evidence-cell evidence-high">高</div>
+                <div class="evidence-cell evidence-high">高<br>MLPerf / 官方性能页</div>
+                <div class="evidence-cell evidence-high">高</div>
+                <div class="evidence-cell evidence-high">高</div>
+                <div class="evidence-cell evidence-high">高</div>
+              </div>
+              <div class="evidence-row">
+                <div class="evidence-name">AMD</div>
+                <div class="evidence-cell evidence-high">高</div>
+                <div class="evidence-cell evidence-high">高<br>MLPerf / 官方性能页</div>
+                <div class="evidence-cell evidence-mid">中</div>
+                <div class="evidence-cell evidence-high">高</div>
+                <div class="evidence-cell evidence-high">高</div>
+              </div>
+              <div class="evidence-row">
+                <div class="evidence-name">Intel Gaudi</div>
+                <div class="evidence-cell evidence-high">高</div>
+                <div class="evidence-cell evidence-high">高<br>MLPerf / Signal65 / 官方材料</div>
+                <div class="evidence-cell evidence-mid">中</div>
+                <div class="evidence-cell evidence-high">高</div>
+                <div class="evidence-cell evidence-mid">中高</div>
+              </div>
+              <div class="evidence-row">
+                <div class="evidence-name">Google TPU / AWS Neuron</div>
+                <div class="evidence-cell evidence-high">高</div>
+                <div class="evidence-cell evidence-mid">中高<br>公开资料多但更偏云内</div>
+                <div class="evidence-cell evidence-high">高</div>
+                <div class="evidence-cell evidence-mid">中<br>框架受平台约束</div>
+                <div class="evidence-cell evidence-mid">中</div>
+              </div>
+              <div class="evidence-row">
+                <div class="evidence-name">华为昇腾</div>
+                <div class="evidence-cell evidence-high">高</div>
+                <div class="evidence-cell evidence-low">低到中<br>公开统一横比不足</div>
+                <div class="evidence-cell evidence-none">弱</div>
+                <div class="evidence-cell evidence-mid">中<br>CANN / MindIE 明确</div>
+                <div class="evidence-cell evidence-low">低</div>
+              </div>
+              <div class="evidence-row">
+                <div class="evidence-name">寒武纪 / 算能</div>
+                <div class="evidence-cell evidence-mid">中高</div>
+                <div class="evidence-cell evidence-low">低<br>公开 benchmark 稀缺</div>
+                <div class="evidence-cell evidence-none">弱</div>
+                <div class="evidence-cell evidence-mid">中</div>
+                <div class="evidence-cell evidence-low">低</div>
+              </div>
+              <div class="evidence-row">
+                <div class="evidence-name">国产观察池</div>
+                <div class="evidence-cell evidence-mid">中</div>
+                <div class="evidence-cell evidence-none">弱</div>
+                <div class="evidence-cell evidence-none">弱</div>
+                <div class="evidence-cell evidence-low">低到中</div>
+                <div class="evidence-cell evidence-none">暂不建议硬比</div>
+              </div>
+              <div class="section-note">这张图不是性能分数，而是“公开证据可得性”图。对国际和国产平台做同表对比时，很多争议不来自芯片本身，而来自公开 benchmark、云价和软件栈信息是否足够透明。</div>
             </div>
           </section>
 
