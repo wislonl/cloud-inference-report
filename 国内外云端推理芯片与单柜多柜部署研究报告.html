@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>国内外云端推理芯片与单柜多柜部署研究报告</title>
+  <style>
+    :root {
+      --bg: #f4efe6;
+      --paper: rgba(255, 251, 245, 0.82);
+      --paper-strong: #fffaf3;
+      --ink: #14213a;
+      --muted: #5a6477;
+      --line: rgba(20, 33, 58, 0.14);
+      --accent: #b75f3a;
+      --accent-soft: rgba(183, 95, 58, 0.12);
+      --teal: #1d6b6f;
+      --gold: #b48a32;
+      --shadow: 0 24px 80px rgba(20, 33, 58, 0.12);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --max: 1240px;
+    }
+    * { box-sizing: border-box; }
+    html {
+      scroll-behavior: smooth;
+      background:
+        radial-gradient(circle at top left, rgba(183, 95, 58, 0.16), transparent 28%),
+        radial-gradient(circle at top right, rgba(29, 107, 111, 0.12), transparent 24%),
+        linear-gradient(180deg, #f2ecdf 0%, #f8f4ec 48%, #f2ede5 100%);
+    }
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.65;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.18), transparent),
+        repeating-linear-gradient(90deg, rgba(20, 33, 58, 0.02) 0 1px, transparent 1px 92px),
+        transparent;
+    }
+    a { color: inherit; }
+    .shell { width: min(calc(100% - 32px), var(--max)); margin: 18px auto 48px; }
+    .topbar {
+      position: sticky; top: 12px; z-index: 20; display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; padding: 14px 18px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.35);
+      border-radius: 999px; background: rgba(20, 33, 58, 0.82); box-shadow: 0 18px 60px rgba(10, 18, 34, 0.24);
+      backdrop-filter: blur(18px); color: #f6efe4;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+    .brand-mark {
+      width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center;
+      font-family: "Times New Roman", "Songti SC", serif; font-size: 18px; letter-spacing: 0.08em;
+      background: linear-gradient(145deg, #ddb47c, #9f522f); color: white; box-shadow: inset 0 0 18px rgba(255,255,255,0.16);
+    }
+    .brand-copy, .brand-copy strong, .hero h1, .section-title h2, .stat-card strong, .case-card h3 { min-width: 0; font-family: "Times New Roman", "Songti SC", "STSong", serif; }
+    .brand-copy strong { display: block; font-size: 15px; }
+    .brand-copy span { display: block; font-size: 11px; color: rgba(246, 239, 228, 0.72); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .nav { display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end; }
+    .nav a { text-decoration: none; padding: 8px 12px; font-size: 12px; border-radius: 999px; color: rgba(246, 239, 228, 0.8); background: rgba(255,255,255,0.06); transition: transform 0.2s ease, background 0.2s ease; }
+    .nav a:hover { background: rgba(255,255,255,0.14); transform: translateY(-1px); }
+    .hero {
+      position: relative; overflow: hidden; padding: 42px; border-radius: var(--radius-xl);
+      background: linear-gradient(140deg, rgba(255,250,243,0.96), rgba(255,248,240,0.84)), linear-gradient(135deg, rgba(20,33,58,0.06), rgba(183,95,58,0.08));
+      border: 1px solid rgba(255,255,255,0.52); box-shadow: var(--shadow);
+    }
+    .hero::before, .hero::after { content: ""; position: absolute; inset: auto; pointer-events: none; border-radius: 50%; filter: blur(8px); }
+    .hero::before { right: -80px; top: -90px; width: 320px; height: 320px; background: radial-gradient(circle, rgba(183,95,58,0.20), transparent 68%); }
+    .hero::after { left: -60px; bottom: -120px; width: 300px; height: 300px; background: radial-gradient(circle, rgba(29,107,111,0.16), transparent 62%); }
+    .eyebrow { display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; margin-bottom: 18px; border-radius: 999px; background: rgba(20, 33, 58, 0.06); color: var(--muted); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; }
+    .hero-grid { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.8fr); gap: 30px; align-items: start; }
+    .hero h1 { margin: 0 0 12px; font-size: clamp(34px, 5.1vw, 68px); line-height: 1.02; font-weight: 700; letter-spacing: 0.02em; }
+    .hero p { margin: 0; font-size: 16px; color: var(--muted); max-width: 780px; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
+    .pill { display: inline-flex; align-items: center; gap: 8px; padding: 12px 16px; border: 1px solid var(--line); border-radius: 999px; background: rgba(255,255,255,0.58); text-decoration: none; font-size: 13px; }
+    .hero-side { display: grid; gap: 12px; }
+    .side-note { padding: 18px; border-radius: var(--radius-lg); background: rgba(20, 33, 58, 0.92); color: #f5efe3; }
+    .side-note small { color: rgba(245, 239, 227, 0.66); letter-spacing: 0.06em; text-transform: uppercase; }
+    .side-note strong { display: block; margin-top: 8px; font-size: 28px; line-height: 1.1; }
+    .side-note p { margin-top: 8px; color: rgba(245, 239, 227, 0.82); font-size: 13px; }
+    .stat-band, .summary-grid, .matrix-grid, .platform-grid, .chart-grid, .ops-grid, .case-grid, .scale-grid, .source-grid { display: grid; gap: 18px; }
+    .stat-band { margin-top: 22px; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .card, .stat-card, .matrix-card, .platform-card, .chart-card, .ops-card, .case-card, .scale-card, .source-card { border: 1px solid rgba(255,255,255,0.5); background: var(--paper); box-shadow: var(--shadow); backdrop-filter: blur(16px); }
+    .stat-card { padding: 18px; border-radius: var(--radius-lg); }
+    .stat-card span { display: block; color: var(--muted); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; }
+    .stat-card strong { display: block; margin-top: 12px; font-size: 28px; line-height: 1.12; font-weight: 700; letter-spacing: 0.02em; }
+    .stat-card p { margin: 8px 0 0; color: var(--muted); font-size: 13px; }
+    main { display: grid; gap: 20px; margin-top: 22px; }
+    section { padding: 30px; border-radius: var(--radius-xl); border: 1px solid rgba(255,255,255,0.45); background: linear-gradient(180deg, rgba(255,250,244,0.86), rgba(255,251,246,0.74)); box-shadow: var(--shadow); }
+    .section-title { display: flex; align-items: end; justify-content: space-between; gap: 16px; margin-bottom: 22px; }
+    .section-title h2 { margin: 0; font-size: clamp(28px, 3.3vw, 46px); line-height: 1.06; font-weight: 700; letter-spacing: 0.02em; }
+    .section-title p { margin: 0; color: var(--muted); max-width: 680px; font-size: 14px; }
+    .summary-grid { grid-template-columns: 1.15fr 0.85fr; align-items: start; }
+    .card { padding: 24px; border-radius: var(--radius-lg); }
+    .quote { position: relative; padding-left: 24px; font-size: 18px; line-height: 1.7; }
+    .quote::before { content: "“"; position: absolute; left: 0; top: -8px; font-size: 48px; color: var(--accent); font-family: "Times New Roman", serif; }
+    .bullet-list { display: grid; gap: 12px; margin-top: 16px; }
+    .bullet { display: grid; grid-template-columns: 18px 1fr; gap: 10px; align-items: start; color: var(--muted); font-size: 14px; }
+    .bullet::before { content: ""; width: 10px; height: 10px; margin-top: 8px; border-radius: 50%; background: linear-gradient(145deg, var(--accent), #e2b26e); box-shadow: 0 0 0 6px rgba(183,95,58,0.09); }
+    .matrix-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .matrix-card { padding: 20px; border-radius: var(--radius-lg); min-height: 234px; }
+    .matrix-card em { display: inline-block; padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-style: normal; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; }
+    .matrix-card h3, .platform-card h3, .ops-card h3, .scale-card h3, .source-card h3 { margin: 14px 0 10px; font-size: 20px; }
+    .matrix-card p, .platform-card p, .ops-card p, .case-card p, .scale-card p, .source-card p { margin: 0; color: var(--muted); font-size: 14px; }
+    .matrix-card ul, .platform-card ul, .ops-card ul, .case-card ul, .scale-card ul { margin: 14px 0 0; padding-left: 18px; color: var(--ink); }
+    .matrix-card li, .platform-card li, .ops-card li, .case-card li, .scale-card li { margin-bottom: 8px; font-size: 14px; }
+    .platform-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .platform-card { padding: 24px; border-radius: var(--radius-lg); }
+    .chip-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 18px; }
+    .chip { padding: 8px 12px; border-radius: 999px; background: rgba(20,33,58,0.07); border: 1px solid rgba(20,33,58,0.08); font-size: 12px; color: var(--ink); }
+    .table-mini { display: grid; gap: 10px; margin-top: 16px; }
+    .table-row { display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 10px; padding: 12px 14px; border-radius: 12px; background: rgba(255,255,255,0.48); border: 1px solid rgba(20,33,58,0.08); font-size: 13px; }
+    .table-head { color: var(--muted); background: rgba(20,33,58,0.05); font-weight: 600; }
+    .chart-grid { grid-template-columns: 1.02fr 0.98fr; align-items: start; }
+    .chart-card { padding: 24px; border-radius: var(--radius-lg); }
+    .bar-chart { display: grid; gap: 12px; margin-top: 20px; }
+    .bar { display: grid; grid-template-columns: 100px minmax(0, 1fr) 68px; align-items: center; gap: 12px; font-size: 14px; }
+    .bar-track { position: relative; height: 16px; border-radius: 999px; overflow: hidden; background: rgba(20,33,58,0.08); }
+    .bar-fill { position: absolute; inset: 0 auto 0 0; border-radius: inherit; background: linear-gradient(90deg, var(--teal), var(--gold)); }
+    .bar:nth-child(2) .bar-fill { background: linear-gradient(90deg, #1e8f99, #59c2b5); }
+    .bar:nth-child(3) .bar-fill { background: linear-gradient(90deg, #6278c0, #8ea4e0); }
+    .bar:nth-child(4) .bar-fill { background: linear-gradient(90deg, #aa6a33, #deb06d); }
+    .bar:nth-child(5) .bar-fill { background: linear-gradient(90deg, #564c82, #8f85d4); }
+    .bar:nth-child(6) .bar-fill { background: linear-gradient(90deg, #9a4f50, #da8f6b); }
+    .metric-stack { display: grid; gap: 12px; margin-top: 18px; }
+    .metric { padding: 16px; border-radius: 16px; background: rgba(20,33,58,0.05); }
+    .metric strong { display: block; font-size: 20px; margin-bottom: 6px; }
+    .topology { display: grid; gap: 18px; }
+    .topology-card { padding: 22px; border-radius: var(--radius-lg); background: rgba(255,255,255,0.56); border: 1px solid rgba(20,33,58,0.08); }
+    .rack-title { display: flex; justify-content: space-between; gap: 16px; align-items: center; margin-bottom: 16px; }
+    .rack-title h3 { margin: 0; font-size: 22px; }
+    .diagram { display: grid; gap: 14px; }
+    .diagram-row { display: grid; gap: 12px; align-items: center; }
+    .diagram-row.cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .diagram-row.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .diagram-row.cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .node { position: relative; padding: 14px; border-radius: 16px; text-align: center; font-size: 13px; background: linear-gradient(180deg, rgba(20,33,58,0.92), rgba(26,44,72,0.86)); color: #fff; box-shadow: 0 18px 30px rgba(20,33,58,0.12); }
+    .node.light { background: linear-gradient(180deg, rgba(183,95,58,0.94), rgba(162,80,53,0.86)); }
+    .node.soft { background: rgba(29,107,111,0.92); }
+    .link-label { text-align: center; color: var(--muted); font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; }
+    .ops-grid, .case-grid, .scale-grid, .source-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .ops-card, .case-card, .scale-card, .source-card { padding: 22px; border-radius: var(--radius-lg); }
+    .case-card h3 { margin: 14px 0 12px; font-size: 26px; line-height: 1.12; font-weight: 700; letter-spacing: 0.02em; }
+    .case-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+    .tag { padding: 6px 10px; border-radius: 999px; background: rgba(20,33,58,0.06); color: var(--muted); font-size: 12px; }
+    .source-card a { text-decoration: none; color: var(--accent); }
+    footer { padding: 24px 12px 4px; color: var(--muted); font-size: 12px; text-align: center; }
+    @media (max-width: 1120px) {
+      .hero-grid, .summary-grid, .chart-grid, .platform-grid, .ops-grid, .case-grid, .scale-grid, .source-grid, .matrix-grid, .stat-band { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 780px) {
+      .shell { width: min(calc(100% - 20px), var(--max)); margin-top: 12px; }
+      .topbar { position: static; border-radius: 24px; }
+      .nav { justify-content: flex-start; }
+      .hero, section { padding: 22px; }
+      .hero-grid, .summary-grid, .chart-grid, .platform-grid, .ops-grid, .case-grid, .scale-grid, .source-grid, .matrix-grid, .stat-band, .diagram-row.cols-2, .diagram-row.cols-3, .diagram-row.cols-4, .table-row { grid-template-columns: 1fr; }
+      .bar { grid-template-columns: 1fr; gap: 6px; }
+      .section-title { align-items: start; flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="topbar">
+      <div class="brand">
+        <div class="brand-mark">AI</div>
+        <div class="brand-copy">
+          <strong>云端推理芯片与部署研究</strong>
+          <span>面向演示与阅读重构的单页网页版本</span>
+        </div>
+      </div>
+      <nav class="nav">
+        <a href="#summary">摘要</a>
+        <a href="#matrix">选型</a>
+        <a href="#platforms">平台</a>
+        <a href="#topology">机柜</a>
+        <a href="#cases">案例</a>
+        <a href="#sources">来源</a>
+      </nav>
+    </div>
+    <header class="hero">
+      <div class="eyebrow">Cloud Inference Chips · Rack Strategy · 2026-04-21</div>
+      <div class="hero-grid">
+        <div>
+          <h1>把芯片选择、系统互联、机柜热密度，放到同一张决策图里。</h1>
+          <p>这不是单纯的“谁的 TOPS 更高”报告，而是一个面向部署落地的观察框架：大模型推理进入显存与系统工程时代，小模型服务则继续由功耗、成本与运维复杂度主导。</p>
+          <div class="hero-actions">
+            <a class="pill" href="#matrix">先看怎么选平台</a>
+            <a class="pill" href="#topology">看单柜与多柜差异</a>
+            <a class="pill" href="#cases">看三类部署案例</a>
+          </div>
+        </div>
+        <div class="hero-side">
+          <div class="side-note">
+            <small>核心判断 01</small>
+            <strong>70B–405B 更吃显存、HBM 与片间互联</strong>
+            <p>H200、MI300X/MI325X、Trainium2、Trillium、GB200 这类平台，在长上下文和大 KV cache 场景优势更明显。</p>
+          </div>
+          <div class="side-note">
+            <small>核心判断 02</small>
+            <strong>30kW/柜后，机房已经进入方案本体</strong>
+            <p>散热、配电、故障域、网络层级不再是外部条件，而是推理成本和可扩展性的组成部分。</p>
+          </div>
+        </div>
+      </div>
+      <div class="stat-band">
+        <div class="stat-card"><span>第一优先级</span><strong>显存容量与带宽</strong><p>决定 70B 以上模型能否装得下、跑得稳、上下文拉得长。</p></div>
+        <div class="stat-card"><span>第二优先级</span><strong>片间互联</strong><p>决定你是做单节点副本，还是被迫走跨节点分片。</p></div>
+        <div class="stat-card"><span>第三优先级</span><strong>软件栈成熟度</strong><p>推理引擎、量化、continuous batching 会显著改变 tokens/美元。</p></div>
+        <div class="stat-card"><span>第四优先级</span><strong>机柜热密度</strong><p>30kW/柜以上优先直液冷，60kW/柜以上不宜按传统风冷思路扩容。</p></div>
+      </div>
+    </header>
+    <main>
+      <section id="summary">
+        <div class="section-title"><div><h2>执行摘要</h2></div><p>这份网页把原文拆成“结论先行 + 决策路径 + 平台卡片 + 机柜架构 + 典型案例”的阅读顺序，更适合现场演示。</p></div>
+        <div class="summary-grid">
+          <div class="card">
+            <div class="quote">2026 年的云端推理主战场，不再是单一的 TOPS/FLOPS，而是显存容量与带宽、片间互联、推理软件栈、机柜热密度四个维度的耦合优化。</div>
+            <div class="bullet-list">
+              <div class="bullet"><div>70B–405B 模型更受益于高显存、高带宽与强片间互联，尤其在长上下文、长 KV cache 与多并发服务中。</div></div>
+              <div class="bullet"><div>7B–13B、CV、BERT 类任务通常在 L4/L40S、Inferentia2、Atlas 300I、BM1684X 一类平台上更容易做出性价比。</div></div>
+              <div class="bullet"><div>国产平台在数据主权、供应链韧性和政企私有化上有天然优势，但公开、可复核 benchmark 透明度仍弱于国际 GPU/TPU/云 ASIC 阵营。</div></div>
+            </div>
+          </div>
+          <div class="card">
+            <h3>建议先回答三个问题</h3>
+            <div class="bullet-list">
+              <div class="bullet"><div><strong>先问网络：</strong>你的价值在单机箱互联，还是跨机架扩展？</div></div>
+              <div class="bullet"><div><strong>先问热密度：</strong>设计功率接近 30kW/柜后，传统风冷的可运维性会迅速下降。</div></div>
+              <div class="bullet"><div><strong>先问故障域：</strong>做单节点大副本，还是多节点分片？这两条路对 ToR、Spine、PDU、CDU 和运维策略要求完全不同。</div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="matrix">
+        <div class="section-title"><div><h2>选型矩阵</h2></div><p>先按负载类型和组织约束分层，再去看单芯片算力。否则容易在采购时被“峰值数字”误导。</p></div>
+        <div class="matrix-grid">
+          <article class="matrix-card"><em>Small Models</em><h3>小模型、BERT、ResNet、检索推荐</h3><p>目标通常是低时延、低功耗、低单次请求成本。</p><ul><li>更关键的指标：单请求延迟、批处理开销、每百万请求成本。</li><li>更合适的平台：L4/L40S、Inferentia2、Atlas 300I Duo、BM1684X。</li><li>常见误区：一开始就上 8×H200/MI325X。</li></ul></article>
+          <article class="matrix-card"><em>7B–70B</em><h3>中大模型在线服务</h3><p>从这个区间开始，显存容量、HBM 带宽和 KV cache 管理已经变成一线问题。</p><ul><li>更关键的指标：显存容量、HBM 带宽、continuous batching、量化路径。</li><li>更合适的平台：H100 NVL/H200、MI300X、Gaudi3、TPU v5e/v6e、Ascend 私有化方案。</li><li>常见误区：只看峰值 FLOPS。</li></ul></article>
+          <article class="matrix-card"><em>70B–405B</em><h3>长上下文与高并发 LLM</h3><p>系统架构和网络设计开始超过单卡压测的重要性。</p><ul><li>更关键的指标：片间互联、张量并行、TTFT、尾延迟与故障域。</li><li>更合适的平台：H200、MI325X、Trillium、Trainium2、B200、Ascend 超节点。</li><li>常见误区：用单副本思维扩容。</li></ul></article>
+          <article class="matrix-card"><em>Compliance</em><h3>主权、合规、连续可得性</h3><p>当数据不出域、行业监管强或供应链波动大时，平台选择逻辑会发生变化。</p><ul><li>优先纳入 PoC：昇腾、寒武纪、算能。</li><li>必须增加的维度：框架迁移成本、推理精度回归、行业链路可得性、本地服务能力。</li><li>更稳妥的策略：核心大模型与轻量感知任务分平台部署。</li></ul></article>
+        </div>
+      </section>
+      <section id="platforms">
+        <div class="section-title"><div><h2>平台图谱</h2></div><p>国际阵营更透明，国产阵营更可控。真正的采购动作，通常需要把两者放在同一个 PoC 框架里比较。</p></div>
+        <div class="platform-grid">
+          <article class="platform-card">
+            <h3>国际主流平台</h3>
+            <p>已经形成三条明显路线：通用 GPU、云定制 ASIC/NPU、以及以超节点为核心的 rack-scale 平台。</p>
+            <div class="chip-row"><span class="chip">NVIDIA H100 / H200 / B200 / GB200</span><span class="chip">AMD MI300X / MI325X</span><span class="chip">Intel Gaudi3</span><span class="chip">Google TPU v5e / Trillium</span><span class="chip">AWS Inferentia2 / Trainium2</span></div>
+            <ul><li>优势集中在公开 benchmark、软件生态、云上价格透明度与开源推理栈兼容性。</li><li>H200/MI300X/MI325X 在“显存/美元小时”代理指标上对大模型场景很有竞争力。</li><li>TPU、Neuron、Gaudi3 更适合做“特定工作负载的吞吐/成本效率”比较。</li></ul>
+            <div class="table-mini">
+              <div class="table-row table-head"><div>平台</div><div>内存</div><div>公开定位</div></div>
+              <div class="table-row"><div>H200</div><div>141GB HBM3e</div><div>70B+ 稳健通用选择</div></div>
+              <div class="table-row"><div>MI300X</div><div>192GB HBM3</div><div>长上下文与高显存性价比</div></div>
+              <div class="table-row"><div>GB200 NVL72</div><div>13.4TB HBM3e/柜</div><div>405B 以上与机架级扩展</div></div>
+            </div>
+          </article>
+          <article class="platform-card">
+            <h3>国产主流平台</h3>
+            <p>国产路线更偏向私有化、行业交付与数据主权场景，公开统一口径 benchmark 仍需加强。</p>
+            <div class="chip-row"><span class="chip">华为昇腾 / Atlas 300I</span><span class="chip">寒武纪 MLU370-X8</span><span class="chip">算能 BM1684X</span></div>
+            <ul><li>适合围绕 CANN/MindIE、MagicMind/NeuWare、SophonSDK/TPU-MLIR 建立相对封闭但可控的交付模型。</li><li>主权云、政企私有域和不出域部署通常会优先把国产路线纳入同框 PoC。</li><li>采购前应重点验证框架兼容、量化精度回归、行业应用链路和后续扩容可得性。</li></ul>
+            <div class="table-mini">
+              <div class="table-row table-head"><div>平台</div><div>能力画像</div><div>更适合的任务</div></div>
+              <div class="table-row"><div>Atlas 300I Duo</div><div>280 TOPS INT8 / 140 TFLOPS FP16</div><div>视频解析、检索、推荐、轻中型 NLP</div></div>
+              <div class="table-row"><div>昇腾 910 系列</div><div>更偏系统级互联公开</div><div>大模型私有化与超节点路线</div></div>
+              <div class="table-row"><div>MLU370-X8</div><div>双芯 48GB LPDDR5</div><div>行业推理与本地可交付场景</div></div>
+            </div>
+          </article>
+        </div>
+      </section>
+      <section id="economics">
+        <div class="section-title"><div><h2>性能与成本</h2></div><p>对于长上下文 LLM，显存/美元小时是一个有用的一阶筛选器；但最终 tokens/美元仍然高度依赖软件栈和服务架构。</p></div>
+        <div class="chart-grid">
+          <article class="chart-card">
+            <h3>公开价样本的显存 / 美元小时</h3>
+            <p>值越高，越适合作为长上下文和大 KV cache 场景的候选；但不代表最终一定更便宜。</p>
+            <div class="bar-chart">
+              <div class="bar"><div>Inferentia2</div><div class="bar-track"><div class="bar-fill" style="width: 100%"></div></div><div>42.1</div></div>
+              <div class="bar"><div>TPU v5e</div><div class="bar-track"><div class="bar-fill" style="width: 31.6%"></div></div><div>13.3</div></div>
+              <div class="bar"><div>L40S</div><div class="bar-track"><div class="bar-fill" style="width: 32.5%"></div></div><div>13.7</div></div>
+              <div class="bar"><div>MI300X</div><div class="bar-track"><div class="bar-fill" style="width: 76%"></div></div><div>32.0</div></div>
+              <div class="bar"><div>H100</div><div class="bar-track"><div class="bar-fill" style="width: 19%"></div></div><div>8.0</div></div>
+              <div class="bar"><div>H200</div><div class="bar-track"><div class="bar-fill" style="width: 33.5%"></div></div><div>14.1</div></div>
+            </div>
+          </article>
+          <article class="chart-card">
+            <h3>真正左右最终成本的，不只是卡本身</h3>
+            <div class="metric-stack">
+              <div class="metric"><strong>软件栈成熟度</strong><p>paged attention、continuous batching、量化路径、prefill/decode 解耦会显著改变吞吐与尾延迟。</p></div>
+              <div class="metric"><strong>服务化架构</strong><p>当目标转向 TTFT、TPOT 或 P99 时，答案往往不再是“更强芯片”，而是“更好的服务化与调度”。</p></div>
+              <div class="metric"><strong>基础设施成本</strong><p>30kW/柜以上的配电、液冷、ToR/Spine 与运维窗口，已经会明显改变总拥有成本。</p></div>
+            </div>
+          </article>
+        </div>
+      </section>
+      <section id="topology">
+        <div class="section-title"><div><h2>单柜与多柜</h2></div><p>两者差异并不是“机器数量更多”这么简单，而是网络层、散热层、故障域和机房配电模型的整体变化。</p></div>
+        <div class="topology">
+          <article class="topology-card">
+            <div class="rack-title"><h3>单柜典型拓扑</h3><span class="tag">适合 ≤ 1 机柜 / 1–4 台推理节点</span></div>
+            <div class="diagram">
+              <div class="diagram-row cols-2"><div class="node light">ToR / Leaf-A<br>100 / 200 / 400GbE</div><div class="node light">ToR / Leaf-B<br>100 / 200 / 400GbE</div></div>
+              <div class="link-label">双 ToR 冗余</div>
+              <div class="diagram-row cols-3"><div class="node">推理节点-1</div><div class="node">推理节点-2</div><div class="node">推理节点-3</div></div>
+              <div class="diagram-row cols-2"><div class="node soft">OOB 管理交换机<br>1 / 10 / 25GbE</div><div class="node soft">本地 NVMe / 缓存存储</div></div>
+            </div>
+            <ul><li>10–30kW/柜，风冷、后门换热或低门槛直液冷仍可接受。</li><li>适合 7B–70B 初始 private serving、RAG、CV 混部与低时延接口。</li><li>如果业务明确会走向 405B，第一天就要把网络和液冷按多柜预留。</li></ul>
+          </article>
+          <article class="topology-card">
+            <div class="rack-title"><h3>多柜 Spine-Leaf</h3><span class="tag">适合 2–10 柜以上 / 模型分片与多租服务</span></div>
+            <div class="diagram">
+              <div class="diagram-row cols-2"><div class="node light">Spine-1<br>400 / 800GbE</div><div class="node light">Spine-2<br>400 / 800GbE</div></div>
+              <div class="link-label">上行汇聚</div>
+              <div class="diagram-row cols-3"><div class="node">Compute Rack-1<br>Leaf 双平面</div><div class="node">Compute Rack-2<br>Leaf 双平面</div><div class="node soft">Storage / OOB Rack</div></div>
+              <div class="diagram-row cols-4"><div class="node">Node-1</div><div class="node">Node-2</div><div class="node">Node-3</div><div class="node">Node-4</div></div>
+            </div>
+            <ul><li>30kW/柜以上优先直液冷，60kW/柜以上必须按液冷机房和多故障域思维建设。</li><li>至少分离计算、管理、存储三张网，避免服务流量与控制面互相干扰。</li><li>核心挑战转向 TTFT、KV cache 拆分、RDMA 抖动、升级窗口与故障域设计。</li></ul>
+          </article>
+        </div>
+      </section>
+      <section id="ops">
+        <div class="section-title"><div><h2>扩展、运维与合规</h2></div><p>推理集群的生产能力，往往由“扩展模型 + 运维观测 + 合规边界”三部分共同决定。</p></div>
+        <div class="ops-grid">
+          <article class="ops-card"><h3>扩展策略</h3><p>纵向扩展解决“装得下”，横向扩展解决“并发与规模”。70B 往上通常两者都要配合。</p><ul><li>纵向扩展：更大显存、更快 HBM、更强同节点互联。</li><li>横向扩展：副本池、模型分片、请求路由与多故障域设计。</li><li>生产级能力：prefill/decode 解耦、continuous batching、KV cache 生命周期管理。</li></ul></article>
+          <article class="ops-card"><h3>运维观察项</h3><p>只盯 GPU/NPU 利用率远远不够，很多瓶颈实际上出现在内存与互联层。</p><ul><li>芯片利用率：SM/矩阵单元利用率、HBM 带宽占用。</li><li>内存与 KV cache：命中率、分页/回收次数、prefill/decode 内存拆分。</li><li>互联与网络：NVLink/IB/EFA/RoCE 利用率、PFC、丢包、collective retry。</li></ul></article>
+          <article class="ops-card"><h3>合规与供应链</h3><p>对国内部署，合规与供应链不是附件，而是采购风险本身。</p><ul><li>国内先看《网络安全法》《数据安全法》《个人信息保护法》约束。</li><li>进口高端 AI 加速器仍受美国出口管制与政策变动影响。</li><li>采购前需把“未来能否持续加购、驱动与固件更新是否受限”纳入评估。</li></ul></article>
+        </div>
+      </section>
+      <section id="cases">
+        <div class="section-title"><div><h2>典型部署案例</h2></div><p>原文给了三种不同规模的工程估算。网页里保留了最适合演示的数字：功耗、电费、风险与适配场景。</p></div>
+        <div class="case-grid">
+          <article class="case-card"><div class="case-meta"><span class="tag">≤ 1 柜</span><span class="tag">7B–70B</span><span class="tag">低时延私有部署</span></div><h3>单机柜低时延大模型服务柜</h3><p>参考配置为 1 台 8×Gaudi 3 节点 + 双 200GbE ToR + NVMe 缓存/日志节点，适合 RAG、长上下文 API 和私有服务入口。</p><ul><li>IT 功耗约 9.2kW，PUE 1.35，月电费约 7,154 元。</li><li>若业务以 70B 为主且强调极低 TTFT，这种柜型非常合适。</li><li>主要风险：RoCE 参数、NUMA 亲和、容器镜像与推理框架版本一致性。</li></ul></article>
+          <article class="case-card"><div class="case-meta"><span class="tag">4 柜</span><span class="tag">70B–405B</span><span class="tag">多租与分片</span></div><h3>四机柜中型 H200 推理集群</h3><p>参考配置为 4 台 DGX H200 + 2 台 NDR400 IB 交换机 + 管理/存储交换机与并行文件或对象存储节点。</p><ul><li>IT 功耗约 46.8kW，PUE 1.25，月电费约 33,696 元。</li><li>建议拆成两个故障域，并把 prefill 与 decode 分开调度。</li><li>主要风险：跨机架 TTFT、KV cache 拆分、IB/RDMA 抖动、升级窗口管理。</li></ul></article>
+          <article class="case-card"><div class="case-meta"><span class="tag">12 柜示例</span><span class="tag">&gt; 405B / MoE</span><span class="tag">推理工厂</span></div><h3>大规模多柜 GB200 机架级推理工厂</h3><p>示例按 12 个 GB200 NVL72 计算柜估算，适合 trillion 参数级推理、实时多模态与极大并发长上下文。</p><ul><li>IT 功耗约 840kW，PUE 1.18，月电费约 570,931 元。</li><li>PoC 应按“1 柜功能验证 → 2 柜 cross-rack → 4 柜故障演练”推进。</li><li>主要风险：机房土建、液冷、电力先行，以及单柜故障影响面过大。</li></ul></article>
+        </div>
+      </section>
+      <section id="recommendations">
+        <div class="section-title"><div><h2>按规模给建议</h2></div><p>如果只记住一件事：不同规模的最优策略并不相同，别把大型集群的方法照搬到小规模部署。</p></div>
+        <div class="scale-grid">
+          <article class="scale-card"><h3>小规模用户</h3><p>适用于 ≤ 1 机柜。</p><ul><li>若业务以 BERT、推荐、OCR、视频理解、7B–13B 为主，优先看 L4/L40S、Inferentia2、Atlas 300I、BM1684X。</li><li>若已明确要做 70B 在线服务，优先高显存单节点方案，如 H200、MI300X、Gaudi3。</li><li>PoC 阶段必须固定输入/输出长度、并发和量化精度。</li></ul></article>
+          <article class="scale-card"><h3>中规模用户</h3><p>适用于 2–10 机柜。</p><ul><li>把网络当一等公民设计，至少分离计算、管理、存储三张网。</li><li>先解决 prefill/decode 解耦、KV cache 策略、模型副本池与请求路由，再谈继续堆卡。</li><li>若重视生态与招人便利，GPU 路线更稳；若重视成本效率与自有云生态，TPU/Neuron/国产路线值得深入验证。</li></ul></article>
+          <article class="scale-card"><h3>大规模与合规优先</h3><p>适用于 > 10 机柜或监管强场景。</p><ul><li>优先考虑 rack-scale 或超节点体系，如 GB200 NVL72、Trn2 UltraServer、Trillium 多主机、国产超节点。</li><li>组织上应把机房、电力、液冷、网络和平台软件团队前移到同一个项目组。</li><li>若数据不出域或跨境受限，优先把昇腾、寒武纪、算能纳入 PoC，并按业务分层部署。</li></ul></article>
+        </div>
+      </section>
+      <section id="sources">
+        <div class="section-title"><div><h2>主要来源</h2></div><p>这里保留了适合演示时现场点击的核心来源链接；完整参考文献仍在原始文档中。</p></div>
+        <div class="source-grid">
+          <article class="source-card"><h3>NVIDIA / AMD / Intel</h3><p><a href="https://www.nvidia.com/en-us/data-center/h200/" target="_blank" rel="noreferrer">NVIDIA H200</a></p><p><a href="https://www.nvidia.com/en-us/data-center/h100/" target="_blank" rel="noreferrer">NVIDIA H100</a></p><p><a href="https://www.nvidia.com/en-sg/data-center/gb200-nvl72/" target="_blank" rel="noreferrer">NVIDIA GB200 NVL72</a></p><p><a href="https://www.amd.com/en/products/accelerators/instinct/mi300/mi325x.html" target="_blank" rel="noreferrer">AMD MI325X</a></p><p><a href="https://cdrdv2-public.intel.com/817486/gaudi-3-ai-accelerator-white-paper.pdf" target="_blank" rel="noreferrer">Intel Gaudi3 White Paper</a></p></article>
+          <article class="source-card"><h3>Google / AWS / MLPerf</h3><p><a href="https://docs.cloud.google.com/tpu/docs/v5e" target="_blank" rel="noreferrer">Cloud TPU v5e</a></p><p><a href="https://cloud.google.com/blog/products/compute/accelerating-ai-inference-with-google-cloud-tpus-and-gpus" target="_blank" rel="noreferrer">Google AI Inference Updates</a></p><p><a href="https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/arch/neuron-hardware/inferentia2.html" target="_blank" rel="noreferrer">AWS Inferentia2</a></p><p><a href="https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/arch/neuron-hardware/trainium2.html" target="_blank" rel="noreferrer">AWS Trainium2</a></p><p><a href="https://docs.mlcommons.org/inference_results_v5.0/" target="_blank" rel="noreferrer">MLPerf Inference v5.0</a></p></article>
+          <article class="source-card"><h3>国产平台与部署</h3><p><a href="https://www.hiascend.com/hardware/ai-server" target="_blank" rel="noreferrer">华为昇腾服务器</a></p><p><a href="https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/850/index/index.html" target="_blank" rel="noreferrer">CANN 社区版文档</a></p><p><a href="https://www.cambricon.com/index.php?a=lists&c=index&catid=406&m=content" target="_blank" rel="noreferrer">寒武纪产品资料</a></p><p><a href="https://www.sophgo.com/ecology/detail.html?id=41" target="_blank" rel="noreferrer">算能 BM1684X</a></p><p><a href="https://docs.nvidia.com/dgx-basepod/reference-architecture-infrastructure-foundation-enterprise-ai/latest/reference-architectures.html" target="_blank" rel="noreferrer">NVIDIA DGX BasePOD 参考架构</a></p></article>
+        </div>
+      </section>
+    </main>
+    <footer>根据原始文档《国内外云端推理芯片与单柜多柜部署研究报告》重构。网页版重点优化了阅读顺序、现场演示性与信息层级。</footer>
+  </div>
+</body>
+</html>
