@@ -216,13 +216,6 @@
       background: rgba(255,255,255,0.16);
       transform: translateY(-1px);
     }
-    .toolbar-nav a.current {
-      background: rgba(255,255,255,0.18);
-      color: white;
-    }
-    .nav-group.current .nav-label {
-      color: rgba(239, 195, 138, 0.92);
-    }
     .mode-btn.active {
       background: linear-gradient(135deg, #efc38a, #b6603d);
       color: white;
@@ -2998,10 +2991,6 @@
     const brandCards = [...document.querySelectorAll(".brand-card")];
     const expandBrandsBtn = document.getElementById("expandBrandsBtn");
     const collapseBrandsBtn = document.getElementById("collapseBrandsBtn");
-    const navLinks = [...document.querySelectorAll(".toolbar-nav a[href^='#']")];
-    const observedSections = navLinks
-      .map((link) => document.querySelector(link.getAttribute("href")))
-      .filter(Boolean);
     let currentSlide = 0;
 
     const defaults = {};
@@ -3111,24 +3100,6 @@
         item.classList.toggle("hidden-by-filter", !show);
       });
     }
-
-    function updateActiveNav(id) {
-      document.querySelectorAll(".nav-group.current").forEach((group) => group.classList.remove("current"));
-      navLinks.forEach((link) => {
-        const active = link.getAttribute("href") === `#${id}`;
-        link.classList.toggle("current", active);
-        if (active) link.closest(".nav-group")?.classList.add("current");
-      });
-    }
-
-    const navObserver = new IntersectionObserver((entries) => {
-      const visible = entries
-        .filter((entry) => entry.isIntersecting)
-        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-      if (visible?.target?.id) updateActiveNav(visible.target.id);
-    }, { rootMargin: "-20% 0px -60% 0px", threshold: [0.2, 0.45, 0.7] });
-
-    observedSections.forEach((section) => navObserver.observe(section));
 
     modeButtons.forEach((button) => {
       button.addEventListener("click", () => setMode(button.dataset.mode));
