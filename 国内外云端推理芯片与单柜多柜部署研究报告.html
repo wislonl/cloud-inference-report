@@ -417,6 +417,14 @@
       font-size: 13px;
       max-width: 700px;
     }
+    .database-search {
+      min-width: 260px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(22, 35, 58, 0.1);
+      background: rgba(255,255,255,0.9);
+      color: var(--ink);
+    }
     .database-filters {
       display: flex;
       flex-wrap: wrap;
@@ -478,6 +486,17 @@
       font-size: 11px;
       white-space: nowrap;
     }
+    .database-table th.is-sticky-col,
+    .database-table td.is-sticky-col {
+      position: sticky;
+      left: 0;
+      z-index: 1;
+      background: inherit;
+    }
+    .database-table th.is-sticky-col {
+      z-index: 4;
+      background: rgba(242, 236, 228, 0.98);
+    }
     .database-table tbody tr {
       cursor: pointer;
       transition: background 0.2s ease;
@@ -487,7 +506,10 @@
     }
     .database-table tbody tr.active {
       background: rgba(182, 96, 61, 0.08);
-      box-shadow: inset 3px 0 0 var(--accent);
+      box-shadow: inset 4px 0 0 var(--accent), 0 10px 24px rgba(182, 96, 61, 0.08);
+    }
+    .database-table tbody tr.active td.is-sticky-col {
+      background: rgba(252, 242, 236, 0.98);
     }
     .db-pill {
       display: inline-flex;
@@ -499,6 +521,35 @@
       font-size: 11px;
       line-height: 1;
       white-space: nowrap;
+    }
+    .db-pill.accent {
+      background: rgba(182, 96, 61, 0.12);
+      color: var(--accent);
+      border: 1px solid rgba(182, 96, 61, 0.16);
+    }
+    .database-mobile-list {
+      display: none;
+      gap: 12px;
+    }
+    .database-mobile-card {
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.72);
+      border: 1px solid rgba(22, 35, 58, 0.08);
+      cursor: pointer;
+    }
+    .database-mobile-card.active {
+      border-color: rgba(182, 96, 61, 0.24);
+      box-shadow: 0 10px 26px rgba(182, 96, 61, 0.09);
+    }
+    .database-mobile-card h4 {
+      margin: 0 0 8px;
+      font-size: 18px;
+    }
+    .database-mobile-card p {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 13px;
     }
     .database-detail {
       display: grid;
@@ -575,6 +626,45 @@
       margin-bottom: 8px;
       font-size: 13px;
       color: var(--ink);
+    }
+    .section-card.compact-section .section-title {
+      margin-bottom: 0;
+    }
+    .section-toggle {
+      border: 1px solid rgba(22, 35, 58, 0.08);
+      border-radius: 999px;
+      padding: 8px 12px;
+      background: rgba(255,255,255,0.78);
+      color: var(--muted);
+      font-size: 12px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .section-card.compact-section .section-collapse-body {
+      display: none;
+      margin-top: 18px;
+    }
+    .section-card.compact-section.is-open .section-collapse-body {
+      display: block;
+    }
+    .section-summary-note {
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .relation-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .relation-tags span {
+      display: inline-flex;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(182, 96, 61, 0.08);
+      color: var(--accent);
+      font-size: 11px;
     }
 
     .metric-grid,
@@ -1730,8 +1820,22 @@
       .database-toolbar {
         padding: 14px;
       }
+      .database-search {
+        min-width: 100%;
+      }
       .slide {
         min-height: calc(100vh - 130px);
+      }
+    }
+    @media (max-width: 900px) {
+      .database-table-wrap {
+        display: none;
+      }
+      .database-mobile-list {
+        display: grid;
+      }
+      .database-toolbar {
+        align-items: stretch;
       }
     }
 
@@ -1884,6 +1988,7 @@
             <div class="database-shell">
               <div class="database-toolbar">
                 <p>筛选逻辑优先看平台线和适用模型区间，不直接按“谁更强”排序。表格点击后，下方会更新对应的详情摘要。</p>
+                <input class="database-search" id="databaseSearch" type="search" placeholder="搜索品牌、型号、场景、互联、来源…">
                 <div class="database-filters">
                   <div class="filter-group" data-filter-group="region">
                     <span class="filter-label">区域</span>
@@ -1910,20 +2015,24 @@
                 <table class="database-table">
                   <thead>
                     <tr>
-                      <th>品牌线</th>
+                      <th class="is-sticky-col">品牌线</th>
                       <th>代表型号</th>
                       <th>类型</th>
                       <th>模型区间</th>
                       <th>内存 / 显存</th>
                       <th>互联 / 扩展</th>
                       <th>推荐场景</th>
-                      <th>证据等级</th>
+                      <th>规格透明度</th>
+                      <th>Benchmark 透明度</th>
+                      <th>价格透明度</th>
+                      <th>部署透明度</th>
                       <th>详情</th>
                     </tr>
                   </thead>
                   <tbody id="databaseTableBody"></tbody>
                 </table>
               </div>
+              <div class="database-mobile-list" id="databaseMobileList"></div>
               <div class="database-detail" id="database-detail">
                 <article class="detail-card">
                   <div class="detail-topline" id="detailPills"></div>
@@ -2064,13 +2173,13 @@
                 <summary>
                 <span class="brand-meta">International GPU</span>
                 <h3>NVIDIA / AMD / Intel</h3>
-                <p>适合作为通用 GPU 路线主线，重点跟踪显存、互联、推理软件栈和公开 benchmark。</p>
+                <p>这里更像索引，不再重复主表字段。适合从库表筛到这一类后，再回来做品牌线补充阅读。</p>
                 </summary>
                 <div class="brand-body">
                 <ul>
                   <li>NVIDIA：H100、H200、B200、GB200 / NVL72</li>
-                  <li>AMD：MI300X、MI325X</li>
-                  <li>Intel：Gaudi 3</li>
+                  <li>AMD：MI300X、MI325X；Intel：Gaudi 3</li>
+                  <li><a href="#database" data-db-focus="nvidia-gpu">在主表里看国际 GPU 详情</a></li>
                 </ul>
                 </div>
               </details>
@@ -2078,13 +2187,12 @@
                 <summary>
                 <span class="brand-meta">Cloud ASIC</span>
                 <h3>Google TPU / AWS Neuron</h3>
-                <p>适合单独跟踪云上吞吐/成本效率路线，重点看实例价格、特定负载吞吐和生态兼容。</p>
+                <p>保留为云上专线索引，主判断仍以主表和详情卡为准。</p>
                 </summary>
                 <div class="brand-body">
                 <ul>
-                  <li>Google：TPU v5e、Trillium</li>
-                  <li>AWS：Inferentia2、Trainium2</li>
-                  <li>适合与 GPU 路线做“特定任务性价比”对照</li>
+                  <li>Google：TPU v5e、Trillium；AWS：Inferentia2、Trainium2</li>
+                  <li><a href="#database" data-db-focus="cloud-asic">在主表里看云 ASIC 详情</a></li>
                 </ul>
                 </div>
               </details>
@@ -2092,13 +2200,13 @@
                 <summary>
                 <span class="brand-meta">Domestic Mainline</span>
                 <h3>昇腾 / 寒武纪 / 算能</h3>
-                <p>适合作为国产主线，重点跟踪私有化交付、框架兼容、量化路径、供货和本地服务能力。</p>
+                <p>这里负责品牌线导航；真正的规格、风险和 PoC 字段统一留在主表详情卡里。</p>
                 </summary>
                 <div class="brand-body">
                 <ul>
                   <li>华为昇腾：Atlas 300I、910 系列、超节点路线</li>
-                  <li>寒武纪：MLU370-X8 与云端方案</li>
-                  <li>算能：BM1684X 及边缘到云协同场景</li>
+                  <li>寒武纪：MLU370-X8；算能：BM1684X</li>
+                  <li><a href="#database" data-db-focus="ascend">看昇腾主线</a> / <a href="#database" data-db-focus="cambricon">看寒武纪</a> / <a href="#database" data-db-focus="sophgo">看算能</a></li>
                 </ul>
                 </div>
               </details>
@@ -2157,29 +2265,31 @@
               <div><h2>图形化总览</h2></div>
               <p>先用图把路线、边界和成本结构讲清楚，再看后面的表。这里优先展示口径相对稳定、不容易误导的三类图。</p>
             </div>
-            <div class="chart-meta">
-              <span>图表口径：结构图 / 非统一 benchmark 排名</span>
-              <span>统计时间：2026-04-22</span>
-              <span>用途：演示优先</span>
-            </div>
-            <div class="viz-grid">
-              <article class="viz-card">
-                <h3>品牌路线图</h3>
-                <p>把国际 GPU、云 ASIC、国产主线、国产观察池拆成不同赛道，先看结构再看具体型号。</p>
-              </article>
-              <article class="viz-card">
-                <h3>部署边界图</h3>
-                <p>按模型规模与部署复杂度，直观看出何时还适合单节点，何时必须跨节点、上液冷。</p>
-              </article>
-              <article class="viz-card">
-                <h3>成本构成图</h3>
-                <p>把单柜和多柜的成本重心拆开，避免把“多柜”误解成服务器数量的线性叠加。</p>
-              </article>
-            </div>
-            <div class="chart-map">
-              <a href="#platforms">对应明细：平台图谱</a>
-              <a href="#cost-breakdown">对应明细：成本拆分</a>
-              <a href="#deployment-boundary">对应明细：部署边界</a>
+            <div class="section-collapse-body">
+              <div class="chart-meta">
+                <span>图表口径：结构图 / 非统一 benchmark 排名</span>
+                <span>统计时间：2026-04-22</span>
+                <span>用途：演示优先</span>
+              </div>
+              <div class="viz-grid">
+                <article class="viz-card">
+                  <h3>品牌路线图</h3>
+                  <p>把国际 GPU、云 ASIC、国产主线、国产观察池拆成不同赛道，先看结构再看具体型号。</p>
+                </article>
+                <article class="viz-card">
+                  <h3>部署边界图</h3>
+                  <p>按模型规模与部署复杂度，直观看出何时还适合单节点，何时必须跨节点、上液冷。</p>
+                </article>
+                <article class="viz-card">
+                  <h3>成本构成图</h3>
+                  <p>把单柜和多柜的成本重心拆开，避免把“多柜”误解成服务器数量的线性叠加。</p>
+                </article>
+              </div>
+              <div class="chart-map">
+                <a href="#platforms">对应明细：平台图谱</a>
+                <a href="#cost-breakdown">对应明细：成本拆分</a>
+                <a href="#deployment-boundary">对应明细：部署边界</a>
+              </div>
             </div>
           </section>
 
@@ -3056,31 +3166,31 @@
               <article class="source-card">
                 <h3>NVIDIA / AMD / Intel</h3>
                 <div class="source-list">
-                  <div class="source-item" data-type="spec"><a href="https://www.nvidia.com/en-us/data-center/h200/" target="_blank" rel="noreferrer">NVIDIA H200</a><div class="source-tags"><span>官方规格</span></div></div>
-                  <div class="source-item" data-type="spec"><a href="https://www.nvidia.com/en-us/data-center/h100/" target="_blank" rel="noreferrer">NVIDIA H100</a><div class="source-tags"><span>官方规格</span></div></div>
-                  <div class="source-item" data-type="spec"><a href="https://www.nvidia.com/en-sg/data-center/gb200-nvl72/" target="_blank" rel="noreferrer">NVIDIA GB200 NVL72</a><div class="source-tags"><span>官方规格</span></div></div>
-                  <div class="source-item" data-type="spec"><a href="https://www.amd.com/en/products/accelerators/instinct/mi300/mi325x.html" target="_blank" rel="noreferrer">AMD MI325X</a><div class="source-tags"><span>官方规格</span></div></div>
-                  <div class="source-item" data-type="perf"><a href="https://cdrdv2.intel.com/v1/dl/getContent/817486" target="_blank" rel="noreferrer">Intel Gaudi3 White Paper</a><div class="source-tags"><span>官方性能页</span></div></div>
+                  <div class="source-item" data-type="spec"><a href="https://www.nvidia.com/en-us/data-center/h200/" target="_blank" rel="noreferrer">NVIDIA H200</a><div class="source-tags"><span>官方规格</span></div><div class="relation-tags"><span>关联：NVIDIA</span><span>关联：70B-405B</span></div></div>
+                  <div class="source-item" data-type="spec"><a href="https://www.nvidia.com/en-us/data-center/h100/" target="_blank" rel="noreferrer">NVIDIA H100</a><div class="source-tags"><span>官方规格</span></div><div class="relation-tags"><span>关联：NVIDIA</span><span>关联：7B-70B</span></div></div>
+                  <div class="source-item" data-type="spec"><a href="https://www.nvidia.com/en-sg/data-center/gb200-nvl72/" target="_blank" rel="noreferrer">NVIDIA GB200 NVL72</a><div class="source-tags"><span>官方规格</span></div><div class="relation-tags"><span>关联：NVIDIA</span><span>关联：405B+</span></div></div>
+                  <div class="source-item" data-type="spec"><a href="https://www.amd.com/en/products/accelerators/instinct/mi300/mi325x.html" target="_blank" rel="noreferrer">AMD MI325X</a><div class="source-tags"><span>官方规格</span></div><div class="relation-tags"><span>关联：AMD</span><span>关联：70B-405B</span></div></div>
+                  <div class="source-item" data-type="perf"><a href="https://cdrdv2.intel.com/v1/dl/getContent/817486" target="_blank" rel="noreferrer">Intel Gaudi3 White Paper</a><div class="source-tags"><span>官方性能页</span></div><div class="relation-tags"><span>关联：Gaudi 3</span><span>关联：单柜闭环</span></div></div>
                 </div>
               </article>
               <article class="source-card">
                 <h3>Google / AWS / MLPerf</h3>
                 <div class="source-list">
-                  <div class="source-item" data-type="spec"><a href="https://cloud.google.com/tpu/docs/v5e" target="_blank" rel="noreferrer">Cloud TPU v5e</a><div class="source-tags"><span>官方规格</span></div></div>
-                  <div class="source-item" data-type="perf"><a href="https://cloud.google.com/blog/products/compute/accelerating-ai-inference-with-google-cloud-tpus-and-gpus" target="_blank" rel="noreferrer">Google AI Inference Updates</a><div class="source-tags"><span>官方性能页</span></div></div>
-                  <div class="source-item" data-type="cloud"><a href="https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/arch/neuron-hardware/inferentia2.html" target="_blank" rel="noreferrer">AWS Inferentia2</a><div class="source-tags"><span>云平台</span><span>官方文档</span></div></div>
-                  <div class="source-item" data-type="cloud"><a href="https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/arch/neuron-hardware/trainium2.html" target="_blank" rel="noreferrer">AWS Trainium2</a><div class="source-tags"><span>云平台</span><span>官方文档</span></div></div>
-                  <div class="source-item" data-type="benchmark"><a href="https://mlcommons.org/2026/04/mlperf-inference-v6-0-results/" target="_blank" rel="noreferrer">MLPerf Inference v6.0</a><div class="source-tags"><span>MLPerf</span><span>Benchmark</span></div></div>
+                  <div class="source-item" data-type="spec"><a href="https://cloud.google.com/tpu/docs/v5e" target="_blank" rel="noreferrer">Cloud TPU v5e</a><div class="source-tags"><span>官方规格</span></div><div class="relation-tags"><span>关联：Cloud ASIC</span><span>关联：7B-70B</span></div></div>
+                  <div class="source-item" data-type="perf"><a href="https://cloud.google.com/blog/products/compute/accelerating-ai-inference-with-google-cloud-tpus-and-gpus" target="_blank" rel="noreferrer">Google AI Inference Updates</a><div class="source-tags"><span>官方性能页</span></div><div class="relation-tags"><span>关联：TPU</span><span>关联：云上推理</span></div></div>
+                  <div class="source-item" data-type="cloud"><a href="https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/arch/neuron-hardware/inferentia2.html" target="_blank" rel="noreferrer">AWS Inferentia2</a><div class="source-tags"><span>云平台</span><span>官方文档</span></div><div class="relation-tags"><span>关联：Inferentia2</span><span>关联：成本效率</span></div></div>
+                  <div class="source-item" data-type="cloud"><a href="https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/arch/neuron-hardware/trainium2.html" target="_blank" rel="noreferrer">AWS Trainium2</a><div class="source-tags"><span>云平台</span><span>官方文档</span></div><div class="relation-tags"><span>关联：Trainium2</span><span>关联：中大模型</span></div></div>
+                  <div class="source-item" data-type="benchmark"><a href="https://mlcommons.org/2026/04/mlperf-inference-v6-0-results/" target="_blank" rel="noreferrer">MLPerf Inference v6.0</a><div class="source-tags"><span>MLPerf</span><span>Benchmark</span></div><div class="relation-tags"><span>关联：国际主线</span><span>关联：Benchmark</span></div></div>
                 </div>
               </article>
               <article class="source-card">
                 <h3>国产平台与部署</h3>
                 <div class="source-list">
-                  <div class="source-item" data-type="spec"><a href="https://www.hiascend.com/hardware/ai-server" target="_blank" rel="noreferrer">华为昇腾服务器</a><div class="source-tags"><span>官方规格</span></div></div>
-                  <div class="source-item" data-type="doc"><a href="https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/850/index/index.html" target="_blank" rel="noreferrer">CANN 社区版文档</a><div class="source-tags"><span>软件栈</span><span>文档</span></div></div>
-                  <div class="source-item" data-type="spec"><a href="https://www.cambricon.com/" target="_blank" rel="noreferrer">寒武纪产品资料</a><div class="source-tags"><span>官方规格</span></div></div>
-                  <div class="source-item" data-type="spec"><a href="https://www.sophgo.com/ecology/detail.html?id=41" target="_blank" rel="noreferrer">算能 BM1684X</a><div class="source-tags"><span>官方规格</span></div></div>
-                  <div class="source-item" data-type="doc"><a href="https://docs.nvidia.com/dgx-basepod/reference-architecture-infrastructure-foundation-enterprise-ai/latest/reference-architectures.html" target="_blank" rel="noreferrer">NVIDIA DGX BasePOD 参考架构</a><div class="source-tags"><span>部署文档</span></div></div>
+                  <div class="source-item" data-type="spec"><a href="https://www.hiascend.com/hardware/ai-server" target="_blank" rel="noreferrer">华为昇腾服务器</a><div class="source-tags"><span>官方规格</span></div><div class="relation-tags"><span>关联：昇腾</span><span>关联：私有化</span></div></div>
+                  <div class="source-item" data-type="doc"><a href="https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/850/index/index.html" target="_blank" rel="noreferrer">CANN 社区版文档</a><div class="source-tags"><span>软件栈</span><span>文档</span></div><div class="relation-tags"><span>关联：昇腾</span><span>关联：PoC</span></div></div>
+                  <div class="source-item" data-type="spec"><a href="https://www.cambricon.com/" target="_blank" rel="noreferrer">寒武纪产品资料</a><div class="source-tags"><span>官方规格</span></div><div class="relation-tags"><span>关联：寒武纪</span><span>关联：行业推理</span></div></div>
+                  <div class="source-item" data-type="spec"><a href="https://www.sophgo.com/ecology/detail.html?id=41" target="_blank" rel="noreferrer">算能 BM1684X</a><div class="source-tags"><span>官方规格</span></div><div class="relation-tags"><span>关联：算能</span><span>关联：轻量推理</span></div></div>
+                  <div class="source-item" data-type="doc"><a href="https://docs.nvidia.com/dgx-basepod/reference-architecture-infrastructure-foundation-enterprise-ai/latest/reference-architectures.html" target="_blank" rel="noreferrer">NVIDIA DGX BasePOD 参考架构</a><div class="source-tags"><span>部署文档</span></div><div class="relation-tags"><span>关联：多柜扩展</span><span>关联：部署边界</span></div></div>
                 </div>
               </article>
             </div>
@@ -3275,9 +3385,12 @@
     const detailPoc = document.getElementById("detailPoc");
     const detailSources = document.getElementById("detailSources");
     const filterChips = [...document.querySelectorAll(".filter-chip")];
+    const databaseSearch = document.getElementById("databaseSearch");
+    const databaseMobileList = document.getElementById("databaseMobileList");
+    const brandFocusLinks = [...document.querySelectorAll("[data-db-focus]")];
     let currentSlide = 0;
     let selectedDatabaseId = null;
-    const databaseFilters = { region: "all", class: "all", scale: "all" };
+    const databaseFilters = { region: "all", class: "all", scale: "all", search: "" };
 
     const databaseEntries = [
       {
@@ -3293,7 +3406,7 @@
         memory: "80GB-141GB / NVL72 机架级",
         interconnect: "NVLink / NVSwitch / rack-scale",
         scenario: "70B+ 在线服务、长上下文、旗舰推理",
-        evidence: "高",
+        evidence: { spec: "高", benchmark: "高", price: "高", deploy: "高" },
         copy: "国际 GPU 主线里最适合作为通用基准线的一条，公开规格、benchmark、软件栈和部署参考都最完整。",
         metrics: [
           ["代表型号", "H100 / H200 / B200 / GB200"],
@@ -3319,7 +3432,7 @@
         memory: "192GB / 256GB HBM",
         interconnect: "Infinity Fabric / 高显存节点",
         scenario: "长上下文、显存密集型 LLM、性价比比较",
-        evidence: "高",
+        evidence: { spec: "高", benchmark: "高", price: "中", deploy: "高" },
         copy: "AMD 路线最有价值的是高显存和高带宽带来的长上下文承载能力，适合和 NVIDIA 做单位显存与部署成本对比。",
         metrics: [
           ["代表型号", "MI300X / MI325X"],
@@ -3345,7 +3458,7 @@
         memory: "128GB HBM",
         interconnect: "以太网友好 / 系统级扩展",
         scenario: "中大模型推理、成本效率验证、单柜闭环",
-        evidence: "中高",
+        evidence: { spec: "高", benchmark: "中高", price: "中", deploy: "中高" },
         copy: "Gaudi 3 适合做特定负载的吞吐/成本验证，尤其是希望以相对明确的系统边界完成单柜或小集群闭环时。",
         metrics: [
           ["代表型号", "Gaudi 3 HL-325L"],
@@ -3371,7 +3484,7 @@
         memory: "16GB-96GiB 设备内存",
         interconnect: "云内互联 / 平台绑定",
         scenario: "云上固定负载、成本效率、快速试错",
-        evidence: "中高",
+        evidence: { spec: "高", benchmark: "中", price: "高", deploy: "中" },
         copy: "云 ASIC 更适合回答“这类固定负载上云是否更省钱”，不适合直接拿来和通用 GPU 做绝对通用排名。",
         metrics: [
           ["代表型号", "TPU v5e / Trillium / Inferentia2 / Trainium2"],
@@ -3397,7 +3510,7 @@
         memory: "A2 推理卡到系统级超节点",
         interconnect: "CANN / MindIE / 系统级扩展",
         scenario: "政企私有化、数据不出域、大模型主线",
-        evidence: "中",
+        evidence: { spec: "高", benchmark: "低", price: "弱", deploy: "中高" },
         copy: "国产主线里最适合当作大模型私有化主候选的一条。重点不只是卡本身，而是 CANN、MindIE、整机与交付体系。",
         metrics: [
           ["代表型号", "Atlas 300I A2 / 910 / 超节点"],
@@ -3423,7 +3536,7 @@
         memory: "48GB / 614.4GB/s",
         interconnect: "双芯加速卡 / 本地可交付",
         scenario: "行业推理、本地可交付、视频和轻中型模型",
-        evidence: "中",
+        evidence: { spec: "中高", benchmark: "低", price: "弱", deploy: "中" },
         copy: "寒武纪更适合被放进行业推理和私有化 PoC 清单里，而不是直接和国际 GPU 做统一 benchmark 排名。",
         metrics: [
           ["代表型号", "MLU370-X8"],
@@ -3449,7 +3562,7 @@
         memory: "16GB 级主板公开配置",
         interconnect: "轻量边缘到云协同",
         scenario: "OCR、视频、轻量推理、边缘到云",
-        evidence: "中低",
+        evidence: { spec: "中", benchmark: "弱", price: "弱", deploy: "中" },
         copy: "BM1684X 更适合轻量推理、视觉与行业视频类任务，不应被拿去硬顶大模型主线。",
         metrics: [
           ["代表型号", "BM1684X"],
@@ -3573,7 +3686,20 @@
     }
 
     function matchesDatabaseFilters(entry) {
-      return Object.entries(databaseFilters).every(([key, value]) => value === "all" || entry[key] === value);
+      const basic = ["region", "class", "scale"].every((key) => databaseFilters[key] === "all" || entry[key] === databaseFilters[key]);
+      if (!basic) return false;
+      if (!databaseFilters.search) return true;
+      const haystack = [
+        entry.brand,
+        entry.model,
+        entry.memory,
+        entry.interconnect,
+        entry.scenario,
+        entry.copy,
+        ...entry.useCases,
+        ...entry.sources
+      ].join(" ").toLowerCase();
+      return haystack.includes(databaseFilters.search);
     }
 
     function renderDetail(entry) {
@@ -3583,7 +3709,10 @@
         <span class="db-pill">${entry.regionLabel}</span>
         <span class="db-pill">${entry.classLabel}</span>
         <span class="db-pill">${entry.scaleLabel}</span>
-        <span class="db-pill">证据：${entry.evidence}</span>
+        <span class="db-pill accent">规格 ${entry.evidence.spec}</span>
+        <span class="db-pill accent">Benchmark ${entry.evidence.benchmark}</span>
+        <span class="db-pill accent">价格 ${entry.evidence.price}</span>
+        <span class="db-pill accent">部署 ${entry.evidence.deploy}</span>
       `;
       detailTitle.textContent = `${entry.brand} · ${entry.model}`;
       detailCopy.textContent = entry.copy;
@@ -3602,7 +3731,8 @@
     function renderDatabase() {
       const filtered = databaseEntries.filter(matchesDatabaseFilters);
       if (!filtered.length) {
-        databaseTableBody.innerHTML = `<tr><td colspan="9">当前筛选条件下没有条目。</td></tr>`;
+        databaseTableBody.innerHTML = `<tr><td colspan="12">当前筛选条件下没有条目。</td></tr>`;
+        databaseMobileList.innerHTML = `<div class="database-mobile-card"><h4>没有匹配条目</h4><p>试着放宽筛选条件或调整搜索关键词。</p></div>`;
         return;
       }
       if (!filtered.some((entry) => entry.id === selectedDatabaseId)) {
@@ -3610,25 +3740,95 @@
       }
       databaseTableBody.innerHTML = filtered.map((entry) => `
         <tr data-entry-id="${entry.id}" class="${entry.id === selectedDatabaseId ? "active" : ""}">
-          <td><strong>${entry.brand}</strong><br><span class="db-pill">${entry.regionLabel}</span></td>
+          <td class="is-sticky-col"><strong>${entry.brand}</strong><br><span class="db-pill">${entry.regionLabel}</span></td>
           <td>${entry.model}</td>
           <td>${entry.classLabel}</td>
           <td>${entry.scaleLabel}</td>
           <td>${entry.memory}</td>
           <td>${entry.interconnect}</td>
           <td>${entry.scenario}</td>
-          <td><span class="db-pill">${entry.evidence}</span></td>
+          <td><span class="db-pill">${entry.evidence.spec}</span></td>
+          <td><span class="db-pill">${entry.evidence.benchmark}</span></td>
+          <td><span class="db-pill">${entry.evidence.price}</span></td>
+          <td><span class="db-pill">${entry.evidence.deploy}</span></td>
           <td>查看详情</td>
         </tr>
+      `).join("");
+      databaseMobileList.innerHTML = filtered.map((entry) => `
+        <article class="database-mobile-card ${entry.id === selectedDatabaseId ? "active" : ""}" data-entry-id="${entry.id}">
+          <div class="detail-topline">
+            <span class="db-pill">${entry.regionLabel}</span>
+            <span class="db-pill">${entry.classLabel}</span>
+            <span class="db-pill">${entry.scaleLabel}</span>
+          </div>
+          <h4>${entry.brand}</h4>
+          <div>${entry.model}</div>
+          <p>${entry.scenario}</p>
+        </article>
       `).join("");
       databaseTableBody.querySelectorAll("tr[data-entry-id]").forEach((row) => {
         row.addEventListener("click", () => {
           const entry = databaseEntries.find((item) => item.id === row.dataset.entryId);
           renderDetail(entry);
           renderDatabase();
+          document.getElementById("database-detail")?.scrollIntoView({ block: "nearest" });
+        });
+      });
+      databaseMobileList.querySelectorAll("[data-entry-id]").forEach((card) => {
+        card.addEventListener("click", () => {
+          const entry = databaseEntries.find((item) => item.id === card.dataset.entryId);
+          renderDetail(entry);
+          renderDatabase();
+          document.getElementById("database-detail")?.scrollIntoView({ block: "start" });
         });
       });
       renderDetail(databaseEntries.find((entry) => entry.id === selectedDatabaseId));
+    }
+
+    function initCompactSections() {
+      const config = [
+        ["visual-compare", "结构图总览，平时查资料时可收起。"],
+        ["performance-visuals", "包含硬指标图、国产规格图、热力图与来源图。"],
+        ["matrix", "场景矩阵是判断层，不需要每次都展开。"],
+        ["platforms", "品牌深潜放到这里，平时按需展开。"],
+        ["selection-table", "推荐表适合方案讨论时展开。"],
+        ["cost-breakdown", "成本拆分偏预算场景，默认收起。"],
+        ["poc-checklist", "PoC 阶段再展开。"],
+        ["deployment-boundary", "大模型边界判断时展开。"],
+        ["procurement-advice", "采购阶段再展开。"],
+        ["source-trust", "做正式引用和答辩时展开。"],
+        ["cases", "案例作为参考层。"],
+        ["sources", "查原始链接时展开。"]
+      ];
+      config.forEach(([id, summary]) => {
+        const section = document.getElementById(id);
+        if (!section) return;
+        section.classList.add("compact-section");
+        if (id === "visual-compare") section.classList.add("is-open");
+        const title = section.querySelector(".section-title");
+        if (!title) return;
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "section-toggle";
+        button.textContent = section.classList.contains("is-open") ? "收起" : "展开";
+        title.appendChild(button);
+        let wrapper = section.querySelector(":scope > .section-collapse-body");
+        if (!wrapper) {
+          const bodyChildren = [...section.children].slice(1);
+          wrapper = document.createElement("div");
+          wrapper.className = "section-collapse-body";
+          bodyChildren.forEach((child) => wrapper.appendChild(child));
+          section.appendChild(wrapper);
+        }
+        const note = document.createElement("div");
+        note.className = "section-summary-note";
+        note.textContent = summary;
+        title.insertAdjacentElement("afterend", note);
+        button.addEventListener("click", () => {
+          section.classList.toggle("is-open");
+          button.textContent = section.classList.contains("is-open") ? "收起" : "展开";
+        });
+      });
     }
 
     modeButtons.forEach((button) => {
@@ -3645,6 +3845,18 @@
         filterChips
           .filter((item) => item.dataset.filterGroup === group)
           .forEach((item) => item.classList.toggle("active", item === chip));
+        renderDatabase();
+      });
+    });
+    databaseSearch?.addEventListener("input", () => {
+      databaseFilters.search = databaseSearch.value.trim().toLowerCase();
+      renderDatabase();
+    });
+    brandFocusLinks.forEach((link) => {
+      link.addEventListener("click", () => {
+        const targetId = link.dataset.dbFocus;
+        if (!targetId) return;
+        selectedDatabaseId = targetId;
         renderDatabase();
       });
     });
@@ -3693,6 +3905,7 @@
     });
 
     buildDots();
+    initCompactSections();
     loadEdits();
     if (sessionStorage.getItem(ACCESS_STORAGE_KEY) === "ok") {
       unlockPage();
